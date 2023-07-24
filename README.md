@@ -69,3 +69,47 @@ Make sure to have Node.js and npm installed on your system before proceeding wit
 ## Deployment
 
 ## Changelog
+### Gitflow and SemVer
+
+We follow the Gitflow methodology for version control and SemVer (Semantic Versioning) for versioning. The commit messages follow the following format:
+
+```
+<commit_type>: <version_number>
+```
+
+Example:
+
+```
+git commit -m "fix: user login error (v1.5.2)"
+git tag v1.5.2
+```
+
+The types of versioning used in this project are:
+
+- MAJOR: v1.0.0
+- MINOR: v0.1.0
+- PATCH: v0.0.1
+
+The commit types used in this project are:
+
+- feat: Used when adding a new feature or functionality to the project.
+- fix: Used when fixing an error or resolving an issue.
+- refactor: Applied when making internal code changes without modifying its external behavior. For example, code structure changes for improvement or maintainability.
+- docs: Used for changes in documentation, such as updates in code comments, README files, or project documentation.
+- style: Used for code style changes, such as formatting adjustments, white spaces, indentation, etc.
+- test: Used for changes related to tests, such as adding, modifying, or removing unit or integration tests.
+- chore: Used for maintenance or administrative task changes, such as dependency updates, project configuration adjustments, etc.
+
+### GITFLOW (Kebab Case)
+
+We organize branches in the Gitflow format using Kebab Case:
+
+- feature/<description-of-content>
+- bugFix/<description-of-content>
+
+Example:
+
+```
+feature/user-authentication
+bugFix/n
+```
