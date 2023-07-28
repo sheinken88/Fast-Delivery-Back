@@ -60,6 +60,46 @@ Make sure to have Node.js and npm installed on your system before proceeding wit
 - Dotenv: Library for managing environment variables in the system.
 - Cors: Library for managing CORS in the system.
 
+## Project Structure
+
+Here is a high-level overview of the project structure, and a brief explanation of what each file and folder is responsible for:
+```
+FAST-DELIVERY-BACK
+|
+|-- config
+| |-- db # Contains configuration for MongoDB connection.
+| |-- token # JWT token configuration and utility functions.
+|
+|-- controllers # Holds the business logic of the application. Controllers interact with models to retrieve data and serve it to the client.
+|
+|-- middlewares # Holds middleware functions used across the application. This includes authentication, authorization, and error handling middleware.
+|
+|-- models # Contains all data models used in the application. Each model represents a collection in the MongoDB database.
+|
+|-- routes # Defines the API endpoints of the application. Routes are linked to controllers which handle the business logic.
+|
+|-- services # Contains service modules used by controllers to handle business logic. These services can include functions for fetching, updating, or deleting data, and more.
+|
+|-- .dockerignore # Lists files/directories that Docker should not copy into the container.
+|
+|-- .env # Contains environment variables. Important: This file should not be checked into version control.
+|
+|-- .gitignore # Specifies files that Git should ignore.
+|
+|-- dockerfile # Contains Docker instructions for building a Docker image for the application.
+|
+|-- index.ts # The main entry point of the application. This file bootstraps the Express application.
+|
+|-- package-lock.json # Contains the exact version of installed npm dependencies in order to reproduce an identical dependency tree.
+|
+|-- package.json # Lists the package dependencies for the project. Also includes metadata about the project such as name, description and version.
+|
+|-- README.md # Provides an overview and documentation for the project.
+|
+|-- tsconfig.json # Contains the configurations and options for the TypeScript compiler.
+```
+
+
 ## Usage and Features
 
 ## API Endpoints
