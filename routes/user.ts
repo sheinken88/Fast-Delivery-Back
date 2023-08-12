@@ -3,6 +3,6 @@ import { login } from "../controllers/userController"
 
 const userRouter = express.Router()
 
-userRouter.get("/secret", login)
+userRouter.post("/secret", login)
 
 export default userRouter
