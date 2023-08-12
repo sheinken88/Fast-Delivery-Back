@@ -72,7 +72,7 @@ FAST-DELIVERY-BACK
 |
 |-- controllers # Holds the business logic of the application. Controllers interact with models to retrieve data and serve it to the client.
 |
-| -- interfaces # Holds the interfaces used across the application.
+|-- interfaces # Holds the interfaces used across the application.
 |
 |-- middlewares # Holds middleware functions used across the application. This includes authentication, authorization, and error handling middleware.
 |
