@@ -6,7 +6,7 @@ export const login = (req: Request, res: Response) => {
     const {text} = req.body
     const token = generateToken(text)
     console.log("Hola mundo");
-        
+    console.log("cookie", token);        
     res.cookie("token", token)
     res.status(200).send(token);
   } catch (error:any) { 
