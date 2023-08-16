@@ -6,6 +6,7 @@ export const getAllAdmins = async () => {
         return admins
     } catch (error) {
         console.log('getAllAdmins service error', error)
+        throw error
     }
 }
 
@@ -16,5 +17,6 @@ export const createAdmin = async (data: object) => {
         return newAdmin
     } catch (error) {
         console.log('createAdmin service error', error)
+        throw error
     }
 }
