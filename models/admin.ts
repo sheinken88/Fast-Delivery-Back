@@ -1,5 +1,5 @@
 import mongoose, { Schema } from 'mongoose'
-import type IAdmin from '../interfaces/admin'
+import type IAdmin from '../interfaces/admin.interface'
 
 const adminSchema: Schema = new Schema({
     username: String,
