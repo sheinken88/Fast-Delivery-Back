@@ -6,7 +6,7 @@
     "type": "commonjs",
     "scripts": {
         "tsc": "tsc",
-        "start": "nodemon index.ts",
+        "start": "nodemon app.ts",
         "lint": "eslint './*/.ts'",
         "prepare": "husky install",
         "test": "jest"
