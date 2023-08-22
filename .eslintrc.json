@@ -27,14 +27,14 @@
       "error",
       {
         "selector": "default",
-        "format": ["camelCase", "snake_case", "PascalCase", "UPPER_CASE"]
+        "format": ["camelCase", "snake_case", "PascalCase", "UPPER_CASE"], "leadingUnderscore": "allow"
       },
       {
         "selector": "parameter",
         "format": ["camelCase", "snake_case", "PascalCase", "UPPER_CASE"],
         "leadingUnderscore": "allow"
       }
-    ],    
+    ],
     "@typescript-eslint/no-explicit-any": "error",
     "@typescript-eslint/no-misused-promises": "off",
     "@typescript-eslint/no-floating-promises": "error"
