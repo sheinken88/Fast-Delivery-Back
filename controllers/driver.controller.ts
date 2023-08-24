@@ -30,11 +30,14 @@ export const login_driver = async (req: Request, res: Response) => {
     try {
         const { email, password } = req.body
 
+        console.log('email: ', email, ' password: ', password)
         const driver = await Driver.findOne({ email })
         if (driver == null) throw new Error('Driver not found')
+        console.log('driver', driver)
 
         const isValid = await driver.validatePassword(password)
         if (!isValid) throw new Error('Incorrect data')
+        console.log('isValid', isValid)
         const { username } = driver
         const token = await loginDriver({ username, email })
         res.cookie('token', token)
@@ -44,3 +47,24 @@ export const login_driver = async (req: Request, res: Response) => {
         res.status(500).send('login_driver controller error')
     }
 }
+
+export const logout_driver = (_req: Request, res: Response) => {
+    try {
+        res.clearCookie('token')
+        res.sendStatus(200)
+    } catch (error) {
+        console.error('Error logging out driver', error)
+        res.status(500).send('logout_driver controller error')
+    }
+}
+
+// export const secret = (req: Request, res: Response) => {
+//     try {
+//         const { payload } = validateToken(req.cookies.token);
+//         req.driver = payload;
+//         res.send(payload);
+//     } catch (error) {
+//         console.error('Error in driver secret', error);
+//         res.status(500).send('driver secret controller error');
+//     }
+// }
