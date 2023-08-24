@@ -1,3 +1,4 @@
 export default interface Token {
-  text: string;
+    username: string
+    email: string
 }
