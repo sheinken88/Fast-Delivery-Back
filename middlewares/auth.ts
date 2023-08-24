@@ -1,24 +1,24 @@
-import { NextFunction, Request, Response } from 'express';
-import { validateToken } from '../config/token';
+import { type NextFunction, type Request, type Response } from 'express'
+import { validateToken } from '../config/token'
 
-declare global {
-  namespace Express {
-    interface Request {
-      user: string
+declare module 'express' {
+    export interface Request {
+        user: string
     }
-  }
 }
 
 export function validateUser(req: Request, res: Response, next: NextFunction) {
-  const token: string = req.cookies.token;
+    const token: string = req.cookies.token
 
-  if (!token) return res.sendStatus(401);
+    if (token != null) return res.sendStatus(401)
 
-  const { user }: string | any = validateToken(token);
+    const { user }: { user: string | null } = validateToken(token) as {
+        user: string | null
+    }
 
-  if (!user) return res.sendStatus(401);
-
-  req.user = user;
-
-  next();
+    if (user != null) {
+        req.user = user
+        return res.sendStatus(401)
+    }
+    next()
 }

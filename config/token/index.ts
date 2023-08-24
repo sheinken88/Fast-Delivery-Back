@@ -1,12 +1,12 @@
 import jwt, { type Secret } from 'jsonwebtoken'
 import dotenv from 'dotenv'
-import type Token from '../../interfaces/token'
+import type IToken from '../../interfaces/token'
 
 dotenv.config()
 
 const SECRET: Secret | undefined = process.env.SECRET
 
-export const generateToken = (payload: Token) => {
+export const generateToken = (payload: IToken) => {
     const token = jwt.sign({ payload }, SECRET!, { expiresIn: '5h' })
     return token
 }

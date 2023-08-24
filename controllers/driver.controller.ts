@@ -1,7 +1,10 @@
 import { type Request, type Response } from 'express'
-import { signupDriver, getAllDrivers } from '../services/driver.services'
+import {
+    signupDriver,
+    getAllDrivers,
+    loginDriver,
+} from '../services/driver.services'
 import { Driver } from '../models'
-import { generateToken } from '../config/token'
 
 export const get_all_drivers = async (_req: Request, res: Response) => {
     try {
@@ -32,14 +35,10 @@ export const login_driver = async (req: Request, res: Response) => {
 
         const isValid = await driver.validatePassword(password)
         if (!isValid) throw new Error('Incorrect data')
-        console.log('isValid', isValid)
-
-        // await loginDriver(email, password)
-
         const { username } = driver
-        const token = generateToken({ username, email })
-
-        res.status(200).json(token)
+        const token = await loginDriver({ username, email })
+        res.cookie('token', token)
+        res.status(200).send('Driver logged successfully')
     } catch (error) {
         console.error('Error logging driver', error)
         res.status(500).send('login_driver controller error')
