@@ -1,7 +1,10 @@
-import { getAllDrivers, signupDriver } from '../services/driver.services'
+import {
+    getAllDrivers,
+    signupDriver,
+    loginDriver,
+} from '../services/driver.services'
 import { Driver } from '../models'
-// import { login_driver } from '../controllers/driver.controller'
-// import { Request, Response } from 'express'
+jest.mock('../models')
 
 describe('GET /', () => {
     afterEach(() => {
@@ -40,52 +43,35 @@ describe('GET /', () => {
         expect(Driver.find).toHaveBeenCalledTimes(1)
     })
 
-    // it('should log in a driver', async () => {
-    //     const mockDriver = {
-    //         username: 'Pedro Juancho',
-    //         email: 'pedrojuancho@gmail.com',
-    //         password: 'pedro123',
-    //         phone_number: '1134521643',
-    //         status: false,
-    //     }
-    //     await signupDriver(mockDriver)
+    describe('loginDriver', () => {
+        it('should log in a driver successfully', async () => {
+            const mockDriver = {
+                username: 'pedro juancho',
+                email: 'pedrojuancho@gmail.com',
+                password: 'pedro123',
+                status: true,
+                packages: [],
+                _id: '143abs3235234',
+            }
 
-    //     const mockDriverData = {
-    //         email: 'pedrojuancho@gmail.com',
-    //         password: 'pedro123',
-    //     }
+            await signupDriver(mockDriver)
 
-    //     const mockDriverModel = {
-    //         findOne: jest.fn((query) => {
-    //             if (query.email === mockDriver.email) {
-    //                 return Promise.resolve(mockDriver)
-    //             } else {
-    //                 return Promise.resolve(null)
-    //             }
-    //         }),
-    //     }
-    //     jest.mock('../models', () => ({
-    //         Driver: mockDriverModel,
-    //     }))
+            const mockDriverData = {
+                email: 'pedrojuancho@gmail.com',
+                password: 'pedro123',
+            }
 
-    //     const mockRequest = {
-    //         body: mockDriverData,
-    //     } as Request
+            Driver.findOne = jest.fn().mockResolvedValue(mockDriverData)
 
-    //     const mockResponse = {
-    //         status: jest.fn().mockReturnThis(),
-    //         json: jest.fn(),
-    //         sendStatus: jest.fn(),
-    //     } as unknown as Response
+            const result = await loginDriver({
+                username: mockDriver.username,
+                email: mockDriver.email,
+            })
 
-    //     await login_driver(mockRequest, mockResponse)
-
-    //     expect(mockDriverModel.findOne).toHaveBeenCalledWith({
-    //         email: mockDriverData.email,
-    //     })
-    //     expect(mockResponse.status).toHaveBeenCalledWith(200)
-    //     expect(mockResponse.json).toHaveBeenCalledWith(expect.any(String))
-    // })
+            expect(result).toBeDefined()
+            expect(typeof result).toBe('string')
+        })
+    })
 
     describe('POST /', () => {
         it('should create a new driver', async () => {
@@ -95,12 +81,21 @@ describe('GET /', () => {
                 password: 'nuevo123',
                 phone_number: '1111111111',
                 status: true,
+                packages: [],
             }
 
             const mockDriver = new Driver(newDriverData)
             Driver.prototype.save = jest.fn().mockResolvedValue(mockDriver)
             const newDriver = await signupDriver(newDriverData)
-            expect(newDriver).toEqual(mockDriver)
+
+            expect(newDriver._id).toEqual(mockDriver._id)
+            expect(newDriver.username).toEqual(mockDriver.username)
+            expect(newDriver.email).toEqual(mockDriver.email)
+            expect(newDriver.password).toEqual(mockDriver.password)
+            expect(newDriver.phone_number).toEqual(mockDriver.phone_number)
+            expect(newDriver.status).toEqual(mockDriver.status)
+            expect(newDriver.packages).toEqual(mockDriver.packages)
+
             expect(Driver.prototype.save).toHaveBeenCalledTimes(1)
         })
 
