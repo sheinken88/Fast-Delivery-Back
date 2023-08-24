@@ -6,4 +6,5 @@ export default interface IDriver {
     status: boolean
     profile_pic: string
     packages: string[]
+    validatePassword: (password: string) => Promise<boolean>
 }
