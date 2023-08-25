@@ -18,7 +18,11 @@ export const get_all_drivers = async (_req: Request, res: Response) => {
 
 export const signup_driver = async (req: Request, res: Response) => {
     try {
+        console.log('req.body', req.body)
+
         const newDriver = await signupDriver(req.body)
+        console.log('newDriver', newDriver)
+
         res.status(201).send(newDriver)
     } catch (error) {
         console.error('Error creating driver:', error)
@@ -30,14 +34,12 @@ export const login_driver = async (req: Request, res: Response) => {
     try {
         const { email, password } = req.body
 
-        console.log('email: ', email, ' password: ', password)
         const driver = await Driver.findOne({ email })
         if (driver == null) throw new Error('Driver not found')
-        console.log('driver', driver)
 
         const isValid = await driver.validatePassword(password)
         if (!isValid) throw new Error('Incorrect data')
-        console.log('isValid', isValid)
+
         const { username } = driver
         const token = await loginDriver({ username, email })
         res.cookie('token', token)
