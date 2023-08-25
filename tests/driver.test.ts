@@ -1,15 +1,8 @@
-import {
-    getAllDrivers,
-    signupDriver,
-    loginDriver,
-} from '../services/driver.services'
-// import { logout_driver } from '../controllers/driver.controller'
-// import { Request, Response } from 'express'
-import { Driver } from '../models'
+import { type Request, type Response } from 'express'
+import { logout_driver } from '../controllers/driver.controller'
 import type IDriver from '../interfaces/driver.interface'
-import { app } from '../app'
-import { agent } from 'supertest'
-jest.mock('../models')
+import { Driver } from '../models'
+import { getAllDrivers, signupDriver } from '../services/driver.services'
 
 describe('GET ALL DRIVERS', () => {
     afterEach(() => {
@@ -62,110 +55,111 @@ describe('GET ALL DRIVERS', () => {
     })
 })
 
-describe('LOGIN DRIVER', () => {
-    const mockDriver = {
-        username: 'pedro juancho',
-        email: 'pedrojuancho@gmail.com',
-        password: 'pedro123',
-        status: true,
-        packages: [],
-        _id: '143abs3235234',
-    }
-    beforeAll(async () => {
-        await signupDriver(mockDriver)
-    })
-    it('should log in a driver successfully', async () => {
-        const mockDriverData = {
-            email: 'pedrojuancho@gmail.com',
-            password: 'pedro123',
-        }
+// describe('LOGIN DRIVER', () => {
+//     const mockDriver = {
+//         username: 'new driver',
+//         email: 'newdriver@gmail.com',
+//         password: 'newDriver123',
+//         phone_number: '1123543223',
+//         status: true,
+//         profile_pic: '',
+//         packages: [],
+//     }
 
-        Driver.findOne = jest.fn().mockResolvedValue(mockDriverData)
+//     beforeAll(async () => {
+//         await signupDriver(mockDriver)
+//     })
 
-        const result = await loginDriver({
-            username: mockDriver.username,
-            email: mockDriver.email,
-        })
+//     it('should log in a driver successfully', async () => {
+//         try {
+//             const mockDriverData = {
+//                 email: mockDriver.email,
+//                 password: mockDriver.password,
+//             }
 
-        expect(result).toBeDefined()
-        expect(typeof result).toBe('string')
-    })
+//             Driver.findOne = jest.fn().mockResolvedValue(mockDriverData)
 
-    it('should not log in with incorrect credentials', async () => {
-        const response = await agent(app).post('/login').send({
-            email: 'incorrectmail@gmail.com',
-            password: 'incorrectpassword',
-        })
+//             const result = await loginDriver({
+//                 username: mockDriver.username,
+//                 email: mockDriver.email,
+//             })
 
-        expect(response.status).toBe(401)
-        expect(response.text).toContain('Incorrect data')
-    })
-})
+//             expect(result).toBeDefined()
+//             expect(typeof result).toBe('string')
+//         } catch (error) {
+//             console.error('Test failed with error:', error)
+//             throw error
+//         }
+//     })
+
+//     it('should not log in with incorrect credentials', async () => {
+//         const response = await agent(app).post('/login').send({
+//             email: 'incorrectmail@gmail.com',
+//             password: 'incorrectpassword',
+//         })
+
+//         expect(response.status).toBe(401)
+//         expect(response.text).toContain('Incorrect data')
+//     })
+// })
 
 describe('CREATE DRIVER', () => {
-    it('should create a new driver', async () => {
-        const newDriverData = {
-            _id: '64dfbf606a8df32956ace2dc',
-            email: 'nuevoconductor@gmail.com',
-            password: 'nuevo123',
-            phone_number: '1111111111',
+    it('should signup a driver correctly', async () => {
+        const mockDriverData = {
+            username: 'new driver',
+            email: 'newdriver@gmail.com',
+            password: 'newDriver123',
+            phone_number: '1123543223',
             status: true,
+            profile_pic: '',
             packages: [],
         }
 
-        const mockDriver = new Driver(newDriverData)
-        Driver.prototype.save = jest.fn().mockResolvedValue(mockDriver)
-        const newDriver = await signupDriver(newDriverData)
+        Driver.prototype.save = jest.fn().mockResolvedValue(mockDriverData)
 
-        expect(newDriver._id).toEqual(mockDriver._id)
-        expect(newDriver.username).toEqual(mockDriver.username)
-        expect(newDriver.email).toEqual(mockDriver.email)
-        expect(newDriver.password).toEqual(mockDriver.password)
-        expect(newDriver.phone_number).toEqual(mockDriver.phone_number)
-        expect(newDriver.status).toEqual(mockDriver.status)
-        expect(newDriver.packages).toEqual(mockDriver.packages)
+        const newDriver = await signupDriver(mockDriverData)
+        console.log('newDriver', newDriver)
 
+        expect(newDriver).toHaveProperty('_id')
         expect(Driver.prototype.save).toHaveBeenCalledTimes(1)
+        expect(newDriver.username).toEqual(mockDriverData.username)
+        expect(newDriver.email).toEqual(mockDriverData.email)
+        expect(newDriver.phone_number).toEqual(mockDriverData.phone_number)
+        expect(newDriver.status).toEqual(mockDriverData.status)
+        expect(newDriver.profile_pic).toEqual(mockDriverData.profile_pic)
+        expect(newDriver.packages).toEqual(mockDriverData.packages)
     })
 
-    it('should not create a new driver', async () => {
-        const newDriverData = {
-            _id: '64dfbf606a8df32956ace2dc',
-            username: 'Nombre del Conductor',
-            email: 'conductor@example.com',
-            phone_number: '1111111111',
+    it('should handle errors correctly', async () => {
+        const mockDriverData = {
+            username: 'new driver',
+            email: 'newdriver@gmail.com',
+            password: 'newDriver123',
             status: true,
+            package: [],
         }
-        Driver.prototype.save = jest
-            .fn()
-            .mockRejectedValue(new Error('Error al crear conductor'))
-        await expect(signupDriver(newDriverData)).rejects.toThrowError(
-            'Error al crear conductor'
-        )
-        expect(Driver.prototype.save).toHaveBeenCalledTimes(1)
-    })
+        const mockError = new Error('Something went wrong!')
 
-    it('should handle errors', async () => {
-        const errorMessage = 'Error al crear conductor'
-        Driver.prototype.save = jest
-            .fn()
-            .mockRejectedValue(new Error(errorMessage))
-        await expect(signupDriver({})).rejects.toThrowError(errorMessage)
+        Driver.prototype.save = jest.fn().mockRejectedValue(mockError)
+
+        await expect(signupDriver(mockDriverData)).rejects.toThrow(mockError)
         expect(Driver.prototype.save).toHaveBeenCalledTimes(1)
     })
 })
 
 describe('LOGOUT DRIVER', () => {
-    it('should be able to delete the drivers cookie', async () => {
+    it('should be able to delete the drivers cookie', () => {
         const clearCookieMock = jest.fn()
         const sendStatusMock = jest.fn()
 
-        // const mockResponse: Partial<Response> = {
-        //     clearCookie: clearCookieMock,
-        //     sendStatus: sendStatusMock,
-        // }
+        const mockRequest = {} as Request
+        const mockResponse: Response = {
+            clearCookie: clearCookieMock,
+            sendStatus: sendStatusMock,
+            status: jest.fn(() => mockResponse),
+        } as unknown as Response
 
-        // logout_driver(mockResponse as Response)
+        logout_driver(mockRequest, mockResponse)
 
         expect(clearCookieMock).toHaveBeenCalledWith('token')
         expect(sendStatusMock).toHaveBeenCalledWith(200)

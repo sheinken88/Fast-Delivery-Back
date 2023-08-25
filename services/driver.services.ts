@@ -14,7 +14,9 @@ export const getAllDrivers = async () => {
 
 export const signupDriver = async (data: object) => {
     try {
+        console.log('data', data)
         const newDriver = new Driver(data)
+        console.log('newDriver')
         await newDriver.save()
         return newDriver
     } catch (error) {
