@@ -1,3 +1,4 @@
+
 import { type Request, type Response } from 'express'
 import {
     getAllAdmins,
@@ -6,15 +7,19 @@ import {
 } from '../services/admin.services'
 import { Admin } from '../models'
 
-export const get_all_admins = async (_req: Request, res: Response) => {
-    try {
-        const admins = await getAllAdmins()
-        res.status(200).send(admins)
-    } catch (error) {
-        console.error('Error fetching admins:', error)
-        res.sendStatus(500)
-    }
-}
+// import { type Request, type Response } from 'express'
+// import { getAllAdmins, createAdmin } from '../services/admin.services'
+
+
+// export const get_all_admins = async (_req: Request, res: Response) => {
+//     try {
+//         const admins = await getAllAdmins()
+//         res.status(200).send(admins)
+//     } catch (error) {
+//         console.error('Error fetching admins:', error)
+//         res.sendStatus(500)
+//     }
+// }
 
 export const signup_admin = async (req: Request, res: Response) => {
     try {
@@ -57,3 +62,4 @@ export const logout_admin = (_req: Request, res: Response) => {
         res.status(500).send('logout_admin controller error')
     }
 }
+

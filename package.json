@@ -13,7 +13,10 @@
     },
     "jest": {
         "preset": "ts-jest",
-        "testEnvironment": "node"
+        "testEnvironment": "node",
+        "setupFilesAfterEnv": [
+            "./tests/test-db-setup.ts"
+        ]
     },
     "repository": {
         "type": "git",
@@ -36,6 +39,7 @@
         "mongodb": "^5.7.0",
         "mongodb-memory-server": "^8.15.1",
         "mongoose": "^7.4.0",
+        "node-mocks-http": "^1.13.0",
         "nodemon": "^3.0.1",
         "ts-node": "^10.9.1",
         "typescript": "^5.1.6"
@@ -45,6 +49,7 @@
         "@types/cookie-parser": "^1.4.3",
         "@types/cors": "^2.8.13",
         "@types/express": "^4.17.17",
+        "@types/express-serve-static-core": "^4.17.36",
         "@types/jest": "^29.5.3",
         "@types/jsonwebtoken": "^9.0.2",
         "@types/node": "^20.4.2",
