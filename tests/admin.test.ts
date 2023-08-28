@@ -1,18 +1,15 @@
-import type { Response } from 'express'
-import { login_admin } from '../controllers/admin.controller'
+import type { Response, Request } from 'express'
 import { getAllAdmins, signupAdmin } from '../services/admin.services'
 import { Admin } from '../models'
 import setupTestDb, { teardownTestDb } from './test-db-setup'
+import { login_admin } from '../controllers/admin.controller'
 
-describe('GET /', () => {
+describe('GET ALL ADMINS', () => {
     beforeAll(async () => {
         await setupTestDb()
     })
     afterAll(async () => {
         await teardownTestDb()
-    })
-    afterEach(() => {
-        jest.restoreAllMocks()
     })
     it('should fetch all admins', async () => {
         const mockAdmins = [
@@ -44,57 +41,92 @@ describe('GET /', () => {
         await expect(getAllAdmins()).rejects.toThrowError(errorMessage)
         expect(Admin.find).toHaveBeenCalledTimes(1)
     })
-    it('should log in an admin', async () => {
-        const mockAdmin = {
-            username: 'Juan Alonso',
-            email: 'juanalonso@gmail.com',
-            password: 'juan123',
-            profile_pic: '/pathto.jpg',
-        }
+})
+
+describe('LOGIN ADMIN', () => {
+    const mockAdmin = {
+        username: 'admin username',
+        email: 'adminemail@gmail.com',
+        password: 'admin123',
+        profile_pic: '',
+    }
+
+    beforeAll(async () => {
+        await setupTestDb()
         await signupAdmin(mockAdmin)
+    })
 
-        const mockAdminData = {
-            email: 'juanalonso@gmail.com',
-            password: 'juan123',
-        }
+    afterAll(async () => {
+        await teardownTestDb()
+    })
 
-        const mockAdmiModel = {
-            findOne: jest.fn(async (query) => {
-                if (query.email === mockAdmin.email) {
-                    // eslint-disable-next-line
-                    return Promise.resolve(mockAdmin)
-                } else {
-                    // eslint-disable-next-line
-                    return Promise.resolve(null)
-                }
-            }),
-        }
-        jest.mock('../models', () => ({
-            Admin: mockAdmiModel,
-        }))
-        /* eslint-disable @typescript-eslint/no-explicit-any */
+    it('should log in an admin with valid credentials', async () => {
         const mockRequest = {
-            body: mockAdminData,
-        } as any
-        /* eslint-enable @typescript-eslint/no-explicit-any */
+            body: {
+                email: 'adminemail@gmail.com',
+                password: 'admin123',
+            },
+        } as unknown as Request
 
-        const mockResponse: Response = {
+        const mockResponse = {
+            cookie: jest.fn(),
             status: jest.fn().mockReturnThis(),
-            json: jest.fn(),
-            sendStatus: jest.fn(),
+            send: jest.fn(),
         } as unknown as Response
 
         await login_admin(mockRequest, mockResponse)
 
-        expect(mockAdmiModel.findOne).toHaveBeenCalledWith({
-            email: mockAdminData.email,
-        })
+        expect(mockResponse.cookie).toHaveBeenCalled()
         expect(mockResponse.status).toHaveBeenCalledWith(200)
-        expect(mockResponse.json).toHaveBeenCalledWith(expect.any(String))
+        expect(mockResponse.send).toHaveBeenCalledWith(
+            'Admin logged successfully'
+        )
+    })
+
+    it('should handle incorrect credentials', async () => {
+        const mockRequest = {
+            body: {
+                email: 'test@example.com',
+                password: 'wrongpassword',
+            },
+        } as unknown as Request
+
+        const mockResponse = {
+            status: jest.fn().mockReturnThis(),
+            send: jest.fn(),
+        } as unknown as Response
+
+        await login_admin(mockRequest, mockResponse)
+
+        expect(mockResponse.status).toHaveBeenCalledWith(500)
+        expect(mockResponse.send).toHaveBeenCalledWith(
+            'login_admin controller error'
+        )
+    })
+
+    it('should handle admin not found', async () => {
+        const mockRequest = {
+            body: {
+                email: 'nonexistent@example.com',
+                password: 'password123',
+            },
+        } as unknown as Request
+
+        const mockResponse = {
+            status: jest.fn().mockReturnThis(),
+            send: jest.fn(),
+        } as unknown as Response
+
+        await login_admin(mockRequest, mockResponse)
+
+        expect(mockResponse.status).toHaveBeenCalledWith(500)
+        expect(mockResponse.send).toHaveBeenCalledWith(
+            'login_admin controller error'
+        )
     })
 })
 
-describe('POST /', () => {
+describe('CREATE ADMIN', () => {
     beforeAll(async () => {
         await setupTestDb()
     })
