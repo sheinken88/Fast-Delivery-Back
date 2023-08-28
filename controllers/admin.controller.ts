@@ -1,4 +1,3 @@
-
 import { type Request, type Response } from 'express'
 import {
     getAllAdmins,
@@ -7,19 +6,15 @@ import {
 } from '../services/admin.services'
 import { Admin } from '../models'
 
-// import { type Request, type Response } from 'express'
-// import { getAllAdmins, createAdmin } from '../services/admin.services'
-
-
-// export const get_all_admins = async (_req: Request, res: Response) => {
-//     try {
-//         const admins = await getAllAdmins()
-//         res.status(200).send(admins)
-//     } catch (error) {
-//         console.error('Error fetching admins:', error)
-//         res.sendStatus(500)
-//     }
-// }
+export const get_all_admins = async (_req: Request, res: Response) => {
+    try {
+        const admins = await getAllAdmins()
+        res.status(200).send(admins)
+    } catch (error) {
+        console.error('Error fetching admins:', error)
+        res.sendStatus(500)
+    }
+}
 
 export const signup_admin = async (req: Request, res: Response) => {
     try {
@@ -43,13 +38,12 @@ export const login_admin = async (req: Request, res: Response) => {
 
         const { username } = driver
         const token = await loginAdmin({ username, email })
-        console.log('token:', token)
+
         res.cookie('token', token)
         res.status(200).send('Admin logged successfully')
     } catch (error) {
         console.error('Error logging admin', error)
-        // res.status(500).send('login_admin controller error')
-        throw error
+        res.status(500).send('login_admin controller error')
     }
 }
 
@@ -62,4 +56,3 @@ export const logout_admin = (_req: Request, res: Response) => {
         res.status(500).send('logout_admin controller error')
     }
 }
-
