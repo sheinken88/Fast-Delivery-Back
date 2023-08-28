@@ -18,11 +18,7 @@ export const get_all_drivers = async (_req: Request, res: Response) => {
 
 export const signup_driver = async (req: Request, res: Response) => {
     try {
-        console.log('req.body', req.body)
-
         const newDriver = await signupDriver(req.body)
-        console.log('newDriver', newDriver)
-
         res.status(201).send(newDriver)
     } catch (error) {
         console.error('Error creating driver:', error)
@@ -42,8 +38,9 @@ export const login_driver = async (req: Request, res: Response) => {
 
         const { username } = driver
         const token = await loginDriver({ username, email })
+
         res.cookie('token', token)
-        res.status(200).send('Driver logged successfully')
+        res.status(200).send('driver logged correctly')
     } catch (error) {
         console.error('Error logging driver', error)
         res.status(500).send('login_driver controller error')
