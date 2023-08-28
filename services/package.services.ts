@@ -43,35 +43,6 @@ export const editPackage = async (
     }
 }
 
-// export const editPackage = async (data: IPackage, _id: Object) => {
-//     try {
-//         const { status, receiver_name, address, weight, quantity } = data
-
-//         const packageToEdit = await Package.findOneAndUpdate(
-//             { _id },
-//             {
-//                 $set: {
-//                     status,
-//                     receiver_name,
-//                     address,
-//                     weight,
-//                     quantity,
-//                 },
-//             },
-//             { new: true }
-//         )
-
-//         if (!packageToEdit) {
-//             throw new Error('Package not found')
-//         }
-
-//         return packageToEdit
-//     } catch (error) {
-//         console.log('editPackage service error', error)
-//         throw error
-//     }
-// }
-
 export const deletePackage = async (id: string) => {
     try {
         const result = await Package.deleteOne({ _id: id })
