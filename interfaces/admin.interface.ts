@@ -3,4 +3,5 @@ export default interface IAdmin {
     email: string
     password: string
     profile_pic: string
+    validatePassword: (password: string) => Promise<boolean>
 }
