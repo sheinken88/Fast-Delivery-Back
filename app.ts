@@ -3,8 +3,6 @@ import router from './routes'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import { connectDB } from './config/db'
-import dotenv from 'dotenv'
-dotenv.config()
 
 const app = express()
 
