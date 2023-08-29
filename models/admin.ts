@@ -3,8 +3,8 @@ import type IAdmin from '../interfaces/admin.interface'
 import bcrypt from 'bcrypt'
 
 const adminSchema: Schema = new Schema({
-    username: { type: String, required: true },
-    email: { type: String, required: true },
+    username: { type: String, required: true, unique: true },
+    email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     profile_pic: String,
     salt: String,

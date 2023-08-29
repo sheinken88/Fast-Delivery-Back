@@ -3,8 +3,8 @@ import mongoose, { type CallbackError, Schema } from 'mongoose'
 import bcrypt from 'bcrypt'
 
 const driverSchema: Schema = new Schema({
-    username: { type: String, required: true },
-    email: { type: String, required: true },
+    username: { type: String, required: true, unique: true },
+    email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     phone_number: { type: String, required: true },
     status: { type: Boolean, required: true },
