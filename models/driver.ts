@@ -9,7 +9,6 @@ const driverSchema: Schema = new Schema({
     phone_number: { type: String, required: true },
     status: { type: Boolean, required: true },
     profile_pic: String,
-    packages: { type: Array, required: true },
     salt: String,
 })
 
