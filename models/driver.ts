@@ -6,7 +6,7 @@ const driverSchema: Schema = new Schema({
     username: { type: String, required: true, unique: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    phone_number: { type: String, required: true },
+    phone_number: { type: String, required: true, unique: true },
     status: { type: Boolean, required: true },
     profile_pic: String,
     salt: String,
