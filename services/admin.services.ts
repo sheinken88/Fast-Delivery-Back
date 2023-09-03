@@ -1,6 +1,7 @@
 import { Admin } from '../models'
 import { generateToken } from '../config/token'
 import type IToken from '../interfaces/token'
+import type IAdmin from '../interfaces/admin.interface'
 
 export const getAllAdmins = async () => {
     try {
@@ -12,9 +13,11 @@ export const getAllAdmins = async () => {
     }
 }
 
-export const signupAdmin = async (data: object) => {
+export const signupAdmin = async (data: IAdmin) => {
     try {
         const newAdmin = new Admin(data)
+        const foundAdmin = await Admin.findOne(data)
+        if (foundAdmin !== null) throw Error('Admin already axists')
         await newAdmin.save()
         return newAdmin
     } catch (error) {

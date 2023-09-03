@@ -8,7 +8,7 @@ import {
 const driverRouter = express.Router()
 
 driverRouter.get('/', get_all_drivers)
-driverRouter.get('/login', login_driver)
+driverRouter.post('/login', login_driver)
 driverRouter.post('/logout', logout_driver)
 driverRouter.post('/signup', signup_driver)
 
