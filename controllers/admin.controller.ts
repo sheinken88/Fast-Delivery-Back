@@ -31,7 +31,7 @@ export const login_admin = async (req: Request, res: Response) => {
         const { email, password } = req.body
 
         const admin = await Admin.findOne({ email })
-        if (admin == null) throw new Error('Driver not found')
+        if (admin == null) throw new Error('Admin not found')
 
         const isValid = await admin.validatePassword(password)
         if (!isValid) throw new Error('Incorrect data')
@@ -39,7 +39,6 @@ export const login_admin = async (req: Request, res: Response) => {
         const { username, id } = admin
         const token = await loginAdmin({ username, email })
 
-        res.cookie('token', token)
         res.status(200).json({
             message: 'Admin logged correctly',
             token,
