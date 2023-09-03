@@ -36,17 +36,19 @@ export const login_driver = async (req: Request, res: Response) => {
         const isValid = await driver.validatePassword(password)
         if (!isValid) throw new Error('Incorrect data')
 
-        const { username } = driver
+        const { username, id } = driver
         const token = await loginDriver({ username, email })
 
-        res.cookie('token', token)
-        res.status(200).send('driver logged correctly')
+        res.status(200).json({
+            message: 'Driver logged correctly',
+            token,
+            user: { id, email, username },
+        })
     } catch (error) {
         console.error('Error logging driver', error)
         res.status(500).send('login_driver controller error')
     }
 }
-
 export const logout_driver = (_req: Request, res: Response) => {
     try {
         res.clearCookie('token')

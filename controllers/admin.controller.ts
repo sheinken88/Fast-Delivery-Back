@@ -30,17 +30,21 @@ export const login_admin = async (req: Request, res: Response) => {
     try {
         const { email, password } = req.body
 
-        const driver = await Admin.findOne({ email })
-        if (driver == null) throw new Error('Driver not found')
+        const admin = await Admin.findOne({ email })
+        if (admin == null) throw new Error('Driver not found')
 
-        const isValid = await driver.validatePassword(password)
+        const isValid = await admin.validatePassword(password)
         if (!isValid) throw new Error('Incorrect data')
 
-        const { username } = driver
+        const { username, id } = admin
         const token = await loginAdmin({ username, email })
 
         res.cookie('token', token)
-        res.status(200).send('Admin logged successfully')
+        res.status(200).json({
+            message: 'Admin logged correctly',
+            token,
+            user: { id, email, username },
+        })
     } catch (error) {
         console.error('Error logging admin', error)
         res.status(500).send('login_admin controller error')
