@@ -10,7 +10,7 @@ declare module 'express' {
 export function validateUser(req: Request, res: Response, next: NextFunction) {
     const token: string = req.cookies.token
 
-    if (token != null) return res.sendStatus(401)
+    if (token == null) return res.sendStatus(401)
 
     const { user }: { user: string | null } = validateToken(token) as {
         user: string | null

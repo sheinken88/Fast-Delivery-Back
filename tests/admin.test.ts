@@ -3,6 +3,7 @@ import { getAllAdmins, signupAdmin } from '../services/admin.services'
 import { Admin } from '../models'
 import setupTestDb, { teardownTestDb } from './test-db-setup'
 import { login_admin } from '../controllers/admin.controller'
+import type IAdmin from '../interfaces/admin.interface'
 
 describe('GET ALL ADMINS', () => {
     beforeAll(async () => {
@@ -12,18 +13,20 @@ describe('GET ALL ADMINS', () => {
         await teardownTestDb()
     })
     it('should fetch all admins', async () => {
-        const mockAdmins = [
+        const mockAdmins: Array<Partial<IAdmin>> = [
             {
                 username: 'Pedro Juancho',
                 email: 'pedrojuancho@gmail.com',
                 password: 'pedro123',
                 profile_pic: '/pathto.jpg',
+                validatePassword: async () => true,
             },
             {
                 username: 'Juan Alonso',
                 email: 'juanalonso@gmail.com',
                 password: 'juan123',
                 profile_pic: '/pathto.jpg',
+                validatePassword: async () => true,
             },
         ]
 
@@ -49,7 +52,9 @@ describe('LOGIN ADMIN', () => {
         email: 'adminemail@gmail.com',
         password: 'admin123',
         profile_pic: '',
-    }
+    } as IAdmin
+
+    mockAdmin.validatePassword = jest.fn().mockImplementation(async () => true)
 
     beforeAll(async () => {
         await setupTestDb()
