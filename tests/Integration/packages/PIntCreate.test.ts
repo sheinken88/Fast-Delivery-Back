@@ -26,7 +26,6 @@ describe('Create Packages', () => {
         if (foundPackage != null) {
             expect(createdPackage).toMatchObject(foundPackage.toObject())
         } else {
-            console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAH')
             fail('El paquete no se creo correctamente')
         }
     })

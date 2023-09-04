@@ -15,11 +15,11 @@ describe('Delete Packages', () => {
     })
     it('should delete the package', async () => {
         const newPackageData = {
-            status: 'entregado',
+            status: 'No entregado',
             receiver_name: 'Marcelo',
-            address: 'Tu direc favorita',
-            weight: 2,
-            quantity: 4,
+            address: 'street',
+            weight: 5,
+            quantity: 2,
         }
 
         const createdPackage = await createPackage(newPackageData)
