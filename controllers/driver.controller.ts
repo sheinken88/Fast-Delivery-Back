@@ -5,6 +5,7 @@ import {
     loginDriver,
 } from '../services/driver.services'
 import { Driver } from '../models'
+import type IToken from '../interfaces/token'
 
 export const get_all_drivers = async (_req: Request, res: Response) => {
     try {
@@ -31,31 +32,20 @@ export const login_driver = async (req: Request, res: Response) => {
         const { email, password } = req.body
 
         const driver = await Driver.findOne({ email })
+
         if (driver == null) throw new Error('Driver not found')
 
         const isValid = await driver.validatePassword(password)
         if (!isValid) throw new Error('Incorrect data')
 
-        const { username, id } = driver
-        const token = await loginDriver({ username, email })
+        const { username } = driver
+        const data: IToken = { username, email }
+        const token = await loginDriver(data)
 
-        res.status(200).json({
-            message: 'Driver logged correctly',
-            token,
-            user: { id, email, username },
-        })
+        res.status(200).send(token)
     } catch (error) {
         console.error('Error logging driver', error)
         res.status(500).send('login_driver controller error')
-    }
-}
-export const logout_driver = (_req: Request, res: Response) => {
-    try {
-        res.clearCookie('token')
-        res.sendStatus(200)
-    } catch (error) {
-        console.error('Error logging out driver', error)
-        res.status(500).send('logout_driver controller error')
     }
 }
 

@@ -12,9 +12,7 @@ const orderRouter = express.Router()
 orderRouter.get('/', get_all_orders)
 orderRouter.get('/driver/:id', get_orders_by_driver)
 orderRouter.get('/:id', get_order_by_id)
-
 orderRouter.post('/', create_order)
-
 orderRouter.put('/complete/:id', complete_order)
 orderRouter.put('/cancel/:id', cancel_order)
 

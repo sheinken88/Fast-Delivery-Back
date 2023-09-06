@@ -7,7 +7,7 @@ export const getAllDrivers = async () => {
         const drivers = await Driver.find()
         return drivers
     } catch (error) {
-        console.log('getAllDrivers service error', error)
+        console.error('getAllDrivers service error', error)
         throw error
     }
 }
@@ -18,7 +18,7 @@ export const signupDriver = async (data: object) => {
         await newDriver.save()
         return newDriver
     } catch (error) {
-        console.log('signupDriver service error', error)
+        console.error('signupDriver service error', error)
         throw error
     }
 }
@@ -28,7 +28,7 @@ export const loginDriver = async (data: IToken) => {
         const token = generateToken(data)
         return token
     } catch (error) {
-        console.log('signupDriver service error', error)
+        console.error('signupDriver service error', error)
         throw error
     }
 }

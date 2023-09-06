@@ -7,7 +7,7 @@ export const getAllPackages = async () => {
         const packages = await Package.find()
         return packages
     } catch (error) {
-        console.log('getAllPackages service error', error)
+        console.error('getAllPackages service error', error)
         throw error
     }
 }
@@ -18,7 +18,7 @@ export const createPackage = async (data: object) => {
         await newPackage.save()
         return newPackage
     } catch (error) {
-        console.log('createPackage service error', error)
+        console.error('createPackage service error', error)
         throw error
     }
 }
@@ -38,7 +38,7 @@ export const editPackage = async (
 
         return updatedPackage
     } catch (error) {
-        console.log('Error en el servicio editPackage', error)
+        console.error('Error en el servicio editPackage', error)
         throw error
     }
 }
@@ -48,7 +48,7 @@ export const deletePackage = async (id: string) => {
         const result = await Package.deleteOne({ _id: id })
         return result.deletedCount !== 0
     } catch (error) {
-        console.log('editPackage service error', error)
+        console.error('editPackage service error', error)
         throw error
     }
 }

@@ -4,10 +4,19 @@ import bcrypt from 'bcrypt'
 
 const driverSchema: Schema = new Schema({
     username: { type: String, required: true, unique: true },
-    email: { type: String, required: true, unique: true },
+    email: {
+        type: String,
+        required: true,
+        unique: true,
+        validate: function (value: string) {
+            const emailRegex =
+                /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+            return emailRegex.test(value)
+        },
+    },
     password: { type: String, required: true },
     phone_number: { type: String, required: true, unique: true },
-    status: { type: Boolean, required: true },
+    status: { type: Boolean, default: true },
     profile_pic: String,
     salt: String,
 })
