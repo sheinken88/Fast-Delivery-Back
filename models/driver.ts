@@ -17,7 +17,11 @@ const driverSchema: Schema = new Schema({
     password: { type: String, required: true },
     phone_number: { type: String, required: true, unique: true },
     status: { type: Boolean, default: true },
-    profile_pic: String,
+    profile_pic: {
+        type: String,
+        default:
+            'https://res.cloudinary.com/dqf9xgsfp/image/upload/v1694235062/fast-delivery/user/generic-user_ijumuf.png',
+    },
     salt: String,
 })
 
