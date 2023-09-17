@@ -36,7 +36,7 @@ export const login_driver = async (req: Request, res: Response) => {
         if (driver == null) throw new Error('Driver not found')
 
         const isValid = await driver.validatePassword(password)
-        if (!isValid) throw new Error('Incorrect data')
+        if (!isValid) throw new Error('Incorrect password')
 
         const { username, profile_pic, phone_number, status } = driver
         const data: IToken = { username, email }
@@ -52,12 +52,15 @@ export const login_driver = async (req: Request, res: Response) => {
                 status,
             },
         })
-    } catch (error) {
-        console.error('Error logging driver', error)
-        res.status(500).send('login_driver controller error')
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            console.error('Error logging driver', error)
+            res.status(500).send(error.message)
+        } else {
+            res.status(500).send('An unknown error occurred')
+        }
     }
 }
-
 // export const secret = (req: Request, res: Response) => {
 //     try {
 //         const { payload } = validateToken(req.cookies.token);

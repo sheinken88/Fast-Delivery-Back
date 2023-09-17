@@ -10,7 +10,13 @@ const app = express()
 
 app.use(express.json())
 app.use(cookieParser())
-app.use(cors())
+app.use(
+    cors({
+        origin: ['http://54.159.77.78', 'http://localhost:3000'],
+        credentials: true,
+    })
+)
+
 app.use('/', router)
 app.use(
     '/api-docs',
@@ -20,7 +26,7 @@ app.use(
 
 connectDB()
     .then(() => {
-        const PORT = process.env.PORT ?? 3000
+        const PORT = process.env.PORT ?? 8080
         app.listen(PORT, () => {
             console.log(`Server is running on port ${PORT}`)
         })
