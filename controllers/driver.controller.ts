@@ -3,6 +3,7 @@ import {
     signupDriver,
     getAllDrivers,
     loginDriver,
+    updateDriverProfile,
 } from '../services/driver.services'
 import { Driver } from '../models'
 import type IToken from '../interfaces/token'
@@ -71,3 +72,14 @@ export const login_driver = async (req: Request, res: Response) => {
 //         res.status(500).send('driver secret controller error');
 //     }
 // }
+
+export const update_driver_profile = async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params
+        const updatedDriver = await updateDriverProfile(id, req.body)
+        res.status(200).send(updatedDriver)
+    } catch (error) {
+        console.error('Error updating driver:', error)
+        res.sendStatus(500)
+    }
+}
