@@ -5,6 +5,7 @@ const packageSchema: Schema = new Schema({
     status: { type: String, required: true },
     receiver_name: { type: String, required: true },
     address: { type: String, required: true },
+    city: { type: String, required: true },
     weight: { type: Number, required: true },
     quantity: { type: Number, required: true },
 })

@@ -4,11 +4,33 @@ import {
     getAllPackages,
     editPackage,
     deletePackage,
+    getPendingPackages,
+    getDeliveredPackages,
 } from '../services/package.services'
 
 export const get_all_packages = async (_req: Request, res: Response) => {
     try {
         const packages = await getAllPackages()
+        res.status(200).send(packages)
+    } catch (error) {
+        console.error('Error fetching packages:', error)
+        res.sendStatus(500)
+    }
+}
+
+export const get_pending_packages = async (_req: Request, res: Response) => {
+    try {
+        const packages = await getPendingPackages()
+        res.status(200).send(packages)
+    } catch (error) {
+        console.error('Error fetching packages:', error)
+        res.sendStatus(500)
+    }
+}
+
+export const get_delivered_packages = async (_req: Request, res: Response) => {
+    try {
+        const packages = await getDeliveredPackages()
         res.status(200).send(packages)
     } catch (error) {
         console.error('Error fetching packages:', error)

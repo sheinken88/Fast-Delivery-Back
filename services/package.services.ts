@@ -11,11 +11,33 @@ export const getAllPackages = async () => {
         throw error
     }
 }
+export const getPendingPackages = async () => {
+    try {
+        const packages = await Package.find({
+            status: { $in: ['pending', 'in progress'] },
+        })
+        return packages
+    } catch (error) {
+        console.error('getPendingPackages service error', error)
+        throw error
+    }
+}
+
+export const getDeliveredPackages = async () => {
+    try {
+        const packages = await Package.find({ status: 'delivered' })
+        return packages
+    } catch (error) {
+        console.error('getPendingPackages service error', error)
+        throw error
+    }
+}
 
 export const createPackage = async (data: object) => {
     try {
         const newPackage = new Package(data)
         await newPackage.save()
+        console.log('newPackage', newPackage)
         return newPackage
     } catch (error) {
         console.error('createPackage service error', error)
