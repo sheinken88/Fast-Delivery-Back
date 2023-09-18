@@ -32,3 +32,16 @@ export const loginDriver = async (data: IToken) => {
         throw error
     }
 }
+
+export const updateDriverProfile = async (id: string, data: object) => {
+    try {
+        const updatedDriver = await Driver.findByIdAndUpdate(id, data, {
+            new: true,
+            runValidators: true,
+        })
+        return updatedDriver
+    } catch (error) {
+        console.error('updateDriverProfile service error', error)
+        throw error
+    }
+}
