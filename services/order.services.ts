@@ -1,6 +1,8 @@
+import { getTokenData } from '../config/token'
 import type IPackage from '../interfaces/package.interface'
 import { Driver, Package } from '../models'
 import { Order } from '../models/order'
+import { editPackage } from './package.services'
 
 export const getAllOrders = async () => {
     try {
@@ -38,13 +40,22 @@ export const getOrdersByDriver = async (driverId: string) => {
     }
 }
 
-export const createOrder = async (driverId: string, idPackages: string[]) => {
+export const createOrder = async (
+    driverToken: string,
+    idPackages: string[]
+) => {
     try {
-        const driver = await Driver.findOne({ _id: driverId })
-
+        const driverData = getTokenData(driverToken)
+        const driver = await Driver.findOne({ email: driverData.email })
         const packages: IPackage[] = []
+
         for (const p of idPackages) {
-            const foundPackage = await Package.findById(p)
+            let foundPackage = await Package.findById(p)
+            if (foundPackage != null)
+                foundPackage = await editPackage(
+                    { status: 'in progress' },
+                    foundPackage._id
+                )
             if (foundPackage != null) {
                 packages.push(foundPackage)
             } else {
@@ -69,11 +80,11 @@ export const completeOrder = async (id: string) => {
         if (order == null)
             throw new Error('No se encontró la orden con ese ID.')
 
-        if (order.status === 'pending') {
+        if (order.status === 'in progress') {
             order.status = 'complete'
             await order.save()
         } else {
-            throw Error('The order is not pending')
+            throw Error('The order is not in progress')
         }
         return order
     } catch (error) {
@@ -90,11 +101,11 @@ export const cancelOrder = async (id: string) => {
             throw Error('No se encontró la orden con ese ID.')
         }
 
-        if (order.status === 'pending') {
+        if (order.status === 'in progress') {
             order.status = 'canceled'
             await order.save()
         } else {
-            throw Error('The order is not pending')
+            throw Error('The order is not in progress')
         }
 
         return order

@@ -6,6 +6,7 @@ import {
     deletePackage,
     getPendingPackages,
     getDeliveredPackages,
+    getPackageById,
 } from '../services/package.services'
 
 export const get_all_packages = async (_req: Request, res: Response) => {
@@ -22,6 +23,16 @@ export const get_pending_packages = async (_req: Request, res: Response) => {
     try {
         const packages = await getPendingPackages()
         res.status(200).send(packages)
+    } catch (error) {
+        console.error('Error fetching packages:', error)
+        res.sendStatus(500)
+    }
+}
+
+export const get_package_by_id = async (req: Request, res: Response) => {
+    try {
+        const foundPackage = await getPackageById(req.params.id)
+        res.status(200).send(foundPackage)
     } catch (error) {
         console.error('Error fetching packages:', error)
         res.sendStatus(500)
@@ -50,7 +61,7 @@ export const create_package = async (req: Request, res: Response) => {
 
 export const edit_package = async (req: Request, res: Response) => {
     try {
-        const result = await editPackage(req.body, req.body._id)
+        const result = await editPackage(req.body.data, req.body._id)
         if (result == null) throw new Error('Error editing package')
         res.status(200).send('edit done succesfully')
     } catch (error) {

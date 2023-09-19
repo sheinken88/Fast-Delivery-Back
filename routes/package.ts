@@ -10,6 +10,7 @@ import {
 const packageRouter = express.Router()
 
 packageRouter.get('/', get_all_packages)
+packageRouter.delete('/:id', delete_package)
 packageRouter.get('/pending', get_pending_packages)
 packageRouter.get('/delivered', get_delivered_packages)
 packageRouter.post('/', create_package)

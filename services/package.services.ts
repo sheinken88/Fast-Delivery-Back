@@ -11,6 +11,7 @@ export const getAllPackages = async () => {
         throw error
     }
 }
+
 export const getPendingPackages = async () => {
     try {
         const packages = await Package.find({
@@ -19,6 +20,16 @@ export const getPendingPackages = async () => {
         return packages
     } catch (error) {
         console.error('getPendingPackages service error', error)
+        throw error
+    }
+}
+
+export const getPackageById = async (id: string) => {
+    try {
+        const foundPackage = await Package.findOne({ _id: id })
+        return foundPackage
+    } catch (error) {
+        console.error('getPackageById service error', error)
         throw error
     }
 }
