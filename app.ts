@@ -5,6 +5,7 @@ import cors from 'cors'
 import { connectDB } from './config/db'
 import swaggerUi from 'swagger-ui-express'
 import swaggerDocs from './swaggerOptions'
+import multer from 'multer'
 
 const app = express()
 
@@ -16,6 +17,9 @@ app.use(
         credentials: true,
     })
 )
+
+const upload = multer()
+app.use(upload.any())
 
 app.use('/', router)
 app.use(
