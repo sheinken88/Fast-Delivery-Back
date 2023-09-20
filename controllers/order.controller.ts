@@ -39,8 +39,8 @@ export const get_orders_by_driver = async (req: Request, res: Response) => {
 
 export const create_order = async (req: Request, res: Response) => {
     try {
-        const { driverToken, packages } = req.body
-        const order = await createOrder(driverToken, packages)
+        const { driverToken, idPackages } = req.body
+        const order = await createOrder(driverToken, idPackages)
         res.status(201).send(order)
     } catch (error) {
         console.error('Create order controller error', error)
