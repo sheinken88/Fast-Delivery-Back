@@ -19,7 +19,12 @@ export const generateToken = (payload: IToken) => {
 }
 
 export const validateToken = (token: string) => {
-    return jwt.verify(token, SECRET!)
+    try {
+        const decodedToken = jwt.verify(token, SECRET!)
+        return decodedToken
+    } catch (error) {
+        throw new Error('Token no válido')
+    }
 }
 
 export const getTokenData = (token: string) => {

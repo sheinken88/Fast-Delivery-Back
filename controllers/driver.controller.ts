@@ -7,6 +7,7 @@ import {
 } from '../services/driver.services'
 import { Driver } from '../models'
 import type IToken from '../interfaces/token'
+import { getTokenData, validateToken } from '../config/token'
 
 export const get_all_drivers = async (_req: Request, res: Response) => {
     try {
@@ -63,21 +64,45 @@ export const login_driver = async (req: Request, res: Response) => {
         }
     }
 }
-// export const secret = (req: Request, res: Response) => {
-//     try {
-//         const { payload } = validateToken(req.cookies.token);
-//         req.driver = payload;
-//         res.send(payload);
-//     } catch (error) {
-//         console.error('Error in driver secret', error);
-//         res.status(500).send('driver secret controller error');
-//     }
-// }
+
+export const secret = async (req: Request, res: Response) => {
+    try {
+        const token: string | null = req.body.tokenData
+        if (token === null || token === undefined) {
+            res.status(401).send('there is no logged user')
+            return
+        }
+
+        validateToken(req.body.tokenData!)
+
+        const tokenData = getTokenData(req.body.tokenData).email
+
+        const driver = await Driver.findOne({ email: tokenData })
+
+        if (driver == null) throw new Error('Driver not found')
+
+        const { _id, username, profile_pic, phone_number, status, email } =
+            driver
+
+        res.status(200).send({
+            user: {
+                _id,
+                username,
+                email,
+                profile_pic,
+                phone_number,
+                status,
+            },
+        })
+    } catch (error) {
+        console.error('Error in driver secret', error)
+        res.status(500).send('driver secret controller error')
+    }
+}
 
 export const update_driver_profile = async (req: Request, res: Response) => {
     try {
         const { id } = req.params
-        console.log('Req.body:', req.body)
 
         const updatedDriver = await updateDriverProfile(id, req.body)
 
