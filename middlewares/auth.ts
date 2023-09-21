@@ -8,17 +8,21 @@ declare module 'express' {
 }
 
 export function validateUser(req: Request, res: Response, next: NextFunction) {
-    const token: string = req.cookies.token
+    const token: string = req.body.user
 
-    if (token == null) return res.sendStatus(401)
+    if (token == null) {
+        res.status(401).send('access denied')
+        return
+    }
 
     const { user }: { user: string | null } = validateToken(token) as {
         user: string | null
     }
 
-    if (user != null) {
-        req.user = user
-        return res.sendStatus(401)
+    if (user === null) {
+        res.status(401).send('no hay usuario logueado')
+        return
     }
+
     next()
 }
