@@ -19,8 +19,9 @@ const driverSchema: Schema = new Schema({
     status: { type: Boolean, default: true },
     profile_pic: {
         type: String,
-        default:
-            'https://res.cloudinary.com/dqf9xgsfp/image/upload/v1694235062/fast-delivery/user/generic-user_ijumuf.png',
+        // default:
+        //     'https://res.cloudinary.com/dqf9xgsfp/image/upload/v1694235062/fast-delivery/user/generic-user_ijumuf.png',
+        default: '',
     },
     salt: String,
 })
