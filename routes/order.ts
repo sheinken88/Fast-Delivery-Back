@@ -6,11 +6,13 @@ import {
     get_order_by_id,
     complete_order,
     cancel_order,
+    get_driver_current_order,
 } from '../controllers/order.controller'
 const orderRouter = express.Router()
 
 orderRouter.get('/', get_all_orders)
 orderRouter.get('/driver/:id', get_orders_by_driver)
+orderRouter.get('/driver/current/:id', get_driver_current_order)
 orderRouter.get('/:id', get_order_by_id)
 orderRouter.post('/', create_order)
 orderRouter.put('/complete/:id', complete_order)
