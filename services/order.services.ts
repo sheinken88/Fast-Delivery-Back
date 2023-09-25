@@ -91,25 +91,12 @@ export const completeOrder = async (id: string) => {
         if (order == null)
             throw new Error('No se encontró la orden con ese ID.')
 
-        const packages: IPackage[] = []
+        const allPackagesAreComplete: boolean = order.packages.every(
+            (p: IPackage) => p.status === 'delivered'
+        )
 
-        for (const p of order.packages) {
-            let foundPackage = await Package.findById(p)
-            if (foundPackage != null)
-                foundPackage = await editPackage(
-                    { status: 'delivered' },
-                    foundPackage._id
-                )
-            if (foundPackage != null) {
-                packages.push(foundPackage)
-            } else {
-                console.log(`Package with ID ${JSON.stringify(p)} not found.`)
-            }
-        }
-
-        if (order.status === 'in progress') {
+        if (order.status === 'in progress' && allPackagesAreComplete) {
             order.status = 'delivered'
-            order.packages = packages
             await order.save()
         } else {
             throw Error('The order is not in progress')
