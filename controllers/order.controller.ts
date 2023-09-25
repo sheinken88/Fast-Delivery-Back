@@ -4,6 +4,7 @@ import {
     getAllOrders,
     getOrdersByDriver,
     getOrderById,
+    getDriverCurrentDelivery,
     completeOrder,
     cancelOrder,
 } from '../services/order.services'
@@ -34,6 +35,17 @@ export const get_orders_by_driver = async (req: Request, res: Response) => {
         res.status(200).send(order)
     } catch (error) {
         console.error('Get order by driver controller error', error)
+    }
+}
+
+export const get_driver_current_order = async (req: Request, res: Response) => {
+    try {
+        const currentDelivery = await getDriverCurrentDelivery(req.params.id)
+        if (currentDelivery == null)
+            res.send(404).send('Current Delivery doesnt exist')
+        res.status(200).send(currentDelivery)
+    } catch (error) {
+        console.error('Get drivers current order controller error')
     }
 }
 

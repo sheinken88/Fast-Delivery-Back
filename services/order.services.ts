@@ -40,6 +40,18 @@ export const getOrdersByDriver = async (driverId: string) => {
     }
 }
 
+export const getDriverCurrentDelivery = async (id: string) => {
+    try {
+        const currentDelivery = await Order.findOne({
+            driver: id,
+            status: 'in progress',
+        }).populate('packages')
+        return currentDelivery
+    } catch (error) {
+        console.error(error)
+        throw error
+    }
+}
 export const createOrder = async (
     driverToken: string,
     idPackages: string[]
@@ -65,7 +77,6 @@ export const createOrder = async (
 
         const newOrder = new Order({ driver, packages })
         await newOrder.save()
-
         return newOrder
     } catch (error) {
         console.error(error)
@@ -80,8 +91,25 @@ export const completeOrder = async (id: string) => {
         if (order == null)
             throw new Error('No se encontró la orden con ese ID.')
 
+        const packages: IPackage[] = []
+
+        for (const p of order.packages) {
+            let foundPackage = await Package.findById(p)
+            if (foundPackage != null)
+                foundPackage = await editPackage(
+                    { status: 'delivered' },
+                    foundPackage._id
+                )
+            if (foundPackage != null) {
+                packages.push(foundPackage)
+            } else {
+                console.log(`Package with ID ${JSON.stringify(p)} not found.`)
+            }
+        }
+
         if (order.status === 'in progress') {
-            order.status = 'complete'
+            order.status = 'delivered'
+            order.packages = packages
             await order.save()
         } else {
             throw Error('The order is not in progress')
@@ -101,8 +129,25 @@ export const cancelOrder = async (id: string) => {
             throw Error('No se encontró la orden con ese ID.')
         }
 
+        const packages: IPackage[] = []
+
+        for (const p of order.packages) {
+            let foundPackage = await Package.findById(p)
+            if (foundPackage != null)
+                foundPackage = await editPackage(
+                    { status: 'pending' },
+                    foundPackage._id
+                )
+            if (foundPackage != null) {
+                packages.push(foundPackage)
+            } else {
+                console.log(`Package with ID ${JSON.stringify(p)} not found.`)
+            }
+        }
+
         if (order.status === 'in progress') {
             order.status = 'canceled'
+            order.packages = packages
             await order.save()
         } else {
             throw Error('The order is not in progress')
