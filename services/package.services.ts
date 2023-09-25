@@ -48,7 +48,6 @@ export const createPackage = async (data: object) => {
     try {
         const newPackage = new Package(data)
         await newPackage.save()
-        console.log('newPackage', newPackage)
         return newPackage
     } catch (error) {
         console.error('createPackage service error', error)
