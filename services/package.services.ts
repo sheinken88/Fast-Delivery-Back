@@ -15,7 +15,7 @@ export const getAllPackages = async () => {
 export const getPendingPackages = async () => {
     try {
         const packages = await Package.find({
-            status: { $in: ['pending', 'in progress'] },
+            status: { $in: ['pending'] },
         })
         return packages
     } catch (error) {

@@ -8,7 +8,7 @@ import { validateUser } from '../middlewares/auth'
 const adminRouter = express.Router()
 
 adminRouter.get('/', validateUser, get_all_admins)
-adminRouter.post('/login', validateUser, login_admin)
-adminRouter.post('/signup', validateUser, signup_admin)
+adminRouter.post('/login', login_admin)
+adminRouter.post('/signup', signup_admin)
 
 export default adminRouter

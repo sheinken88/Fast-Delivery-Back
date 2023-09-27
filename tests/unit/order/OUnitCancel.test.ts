@@ -10,11 +10,11 @@ describe('Cancel Order', () => {
         packages: ['obd3oub90b84n4ifhn', 'mhf04b98b3ibf43ofb'],
     }
 
-    it('should change the status to canceled', async () => {
+    it('should change the status to cancelled', async () => {
         ;(createOrder as jest.Mock).mockResolvedValueOnce(new Order(mockOrder))
         ;(cancelOrder as jest.Mock).mockImplementationOnce(async () => {
             const modifiedOrderData = new Order(mockOrder)
-            modifiedOrderData.status = 'canceled'
+            modifiedOrderData.status = 'cancelled'
 
             return modifiedOrderData
         })
@@ -28,7 +28,7 @@ describe('Cancel Order', () => {
 
         expect(createdOrder).toBeDefined()
         expect(OrderCompleted).toBeDefined()
-        expect(OrderCompleted.status).toBe('canceled')
+        expect(OrderCompleted.status).toBe('cancelled')
         ;(createOrder as jest.Mock).mockRestore()
         ;(cancelOrder as jest.Mock).mockRestore()
     })
