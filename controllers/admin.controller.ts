@@ -49,13 +49,3 @@ export const login_admin = async (req: Request, res: Response) => {
         res.status(500).send('login_admin controller error')
     }
 }
-
-export const logout_admin = (_req: Request, res: Response) => {
-    try {
-        res.clearCookie('token')
-        res.sendStatus(200)
-    } catch (error) {
-        console.error('Error logging out admin', error)
-        res.status(500).send('logout_admin controller error')
-    }
-}

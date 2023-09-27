@@ -7,13 +7,14 @@ import {
     get_pending_packages,
     get_delivered_packages,
 } from '../controllers/package.controller'
+import { validateUser } from '../middlewares/auth'
 const packageRouter = express.Router()
 
-packageRouter.get('/', get_all_packages)
-packageRouter.get('/pending', get_pending_packages)
-packageRouter.get('/delivered', get_delivered_packages)
-packageRouter.post('/', create_package)
-packageRouter.delete('/delete/:id', delete_package)
-packageRouter.put('/edit', edit_package)
+packageRouter.get('/', validateUser, get_all_packages)
+packageRouter.get('/pending', validateUser, get_pending_packages)
+packageRouter.get('/delivered', validateUser, get_delivered_packages)
+packageRouter.post('/', validateUser, create_package)
+packageRouter.delete('/delete/:id', validateUser, delete_package)
+packageRouter.put('/edit', validateUser, edit_package)
 
 export default packageRouter

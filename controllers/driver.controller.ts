@@ -67,15 +67,16 @@ export const login_driver = async (req: Request, res: Response) => {
 
 export const secret = async (req: Request, res: Response) => {
     try {
-        const token: string | null = req.body.tokenData
-        if (token === null || token === undefined) {
+        const authorization: string | undefined = req.headers.authorization
+
+        if (authorization === undefined) {
             res.status(401).send('there is no logged user')
             return
         }
 
-        validateToken(req.body.tokenData!)
+        validateToken(authorization)
 
-        const tokenData = getTokenData(req.body.tokenData).email
+        const tokenData = getTokenData(req.headers.authorization!).email
 
         const driver = await Driver.findOne({ email: tokenData })
 

@@ -1,26 +1,20 @@
 import { type NextFunction, type Request, type Response } from 'express'
 import { validateToken } from '../config/token'
 
-declare module 'express' {
-    export interface Request {
-        user: string
-    }
-}
-
 export function validateUser(req: Request, res: Response, next: NextFunction) {
-    const token: string = req.body.user
+    const authorization: string | undefined = req.headers.authorization
 
-    if (token == null) {
-        res.status(401).send('access denied')
+    if (authorization === undefined) {
+        res.status(401).json({ error: 'Access denied' })
         return
     }
 
-    const { user }: { user: string | null } = validateToken(token) as {
+    const { user }: { user: string | null } = validateToken(authorization) as {
         user: string | null
     }
 
     if (user === null) {
-        res.status(401).send('no hay usuario logueado')
+        res.status(401).json({ error: 'Access denied' })
         return
     }
 
