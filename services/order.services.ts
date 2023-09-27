@@ -63,7 +63,7 @@ export const createOrder = async (
 
         for (const p of idPackages) {
             let foundPackage = await Package.findById(p)
-            if (foundPackage != null)
+            if (foundPackage !== null)
                 foundPackage = await editPackage(
                     { status: 'in progress' },
                     foundPackage._id
@@ -88,14 +88,10 @@ export const completeOrder = async (id: string) => {
     try {
         const order = await Order.findOne({ _id: id })
 
-        if (order == null)
+        if (order === null)
             throw new Error('No se encontró la orden con ese ID.')
 
-        const allPackagesAreComplete: boolean = order.packages.every(
-            (p: IPackage) => p.status === 'delivered'
-        )
-
-        if (order.status === 'in progress' && allPackagesAreComplete) {
+        if (order.status === 'in progress') {
             order.status = 'delivered'
             await order.save()
         } else {
@@ -120,12 +116,12 @@ export const cancelOrder = async (id: string) => {
 
         for (const p of order.packages) {
             let foundPackage = await Package.findById(p)
-            if (foundPackage != null)
+            if (foundPackage !== null && foundPackage.status !== 'delivered')
                 foundPackage = await editPackage(
                     { status: 'pending' },
                     foundPackage._id
                 )
-            if (foundPackage != null) {
+            if (foundPackage !== null) {
                 packages.push(foundPackage)
             } else {
                 console.log(`Package with ID ${JSON.stringify(p)} not found.`)
@@ -133,7 +129,9 @@ export const cancelOrder = async (id: string) => {
         }
 
         if (order.status === 'in progress') {
-            order.status = 'canceled'
+            if (packages.some((p) => p.status === 'delivered'))
+                order.status = 'complete'
+            else order.status = 'canceled'
             order.packages = packages
             await order.save()
         } else {
