@@ -1,7 +1,7 @@
 import mongoose, { Schema } from 'mongoose'
 import type IOrder from '../interfaces/order.interface'
 
-// status types: ['pending', 'canceled', 'completed']
+// status types: ['pending', 'cancelled', 'completed']
 
 const orderSchema: Schema = new Schema({
     status: { type: String, default: 'in progress' },

@@ -45,13 +45,17 @@ export const getDriverCurrentDelivery = async (id: string) => {
         const currentDelivery = await Order.findOne({
             driver: id,
             status: 'in progress',
-        }).populate('packages')
+        }).populate({
+            path: 'packages',
+            match: { status: 'in progress' },
+        })
         return currentDelivery
     } catch (error) {
         console.error(error)
         throw error
     }
 }
+
 export const createOrder = async (
     driverToken: string,
     idPackages: string[]
@@ -80,6 +84,20 @@ export const createOrder = async (
         return newOrder
     } catch (error) {
         console.error(error)
+        throw error
+    }
+}
+
+export const addPackagesToOrder = async (_id: string, packages: IPackage[]) => {
+    try {
+        const order = await Order.findOneAndUpdate(
+            { _id },
+            { $push: { packages: { $each: packages } } },
+            { new: true }
+        )
+        return order
+    } catch (error) {
+        console.error('addPackagesToOrder service error', error)
         throw error
     }
 }
@@ -131,7 +149,7 @@ export const cancelOrder = async (id: string) => {
         if (order.status === 'in progress') {
             if (packages.some((p) => p.status === 'delivered'))
                 order.status = 'complete'
-            else order.status = 'canceled'
+            else order.status = 'cancelled'
             order.packages = packages
             await order.save()
         } else {
