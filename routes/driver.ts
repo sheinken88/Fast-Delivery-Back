@@ -6,12 +6,13 @@ import {
     update_driver_profile,
     secret,
 } from '../controllers/driver.controller'
+import { validateUser } from '../middlewares/auth'
 const driverRouter = express.Router()
 
-driverRouter.get('/', get_all_drivers)
+driverRouter.get('/', validateUser, get_all_drivers)
 driverRouter.post('/login', login_driver)
 driverRouter.post('/signup', signup_driver)
 driverRouter.post('/secret', secret)
-driverRouter.put('/:id', update_driver_profile)
+driverRouter.put('/:id', validateUser, update_driver_profile)
 
 export default driverRouter

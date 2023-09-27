@@ -2,3 +2,4 @@
 .env.test
 node_modules
 fast-delivery-back.tar
+build
