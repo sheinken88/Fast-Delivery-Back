@@ -6,7 +6,7 @@ const adminSchema: Schema = new Schema({
     username: { type: String, required: true, unique: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    profile_pic: String,
+    profile_pic: { type: String, default: '' },
     salt: String,
 })
 

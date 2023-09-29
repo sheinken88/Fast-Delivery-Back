@@ -1,15 +1,9 @@
 import jwt, { type Secret } from 'jsonwebtoken'
 import dotenv from 'dotenv'
 import type IToken from '../../interfaces/token'
+import type IPayload from 'interfaces/payload.interface'
 
 dotenv.config()
-
-interface IPayload {
-    payload: {
-        username: string
-        email: string
-    }
-}
 
 const SECRET: Secret | undefined = process.env.SECRET
 
