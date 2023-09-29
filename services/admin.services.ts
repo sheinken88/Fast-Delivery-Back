@@ -1,6 +1,7 @@
 import { Admin } from '../models'
-import { generateToken } from '../config/token'
+import { generateToken, getTokenData, validateToken } from '../config/token'
 import type IToken from '../interfaces/token'
+import type IAdminEdit from 'interfaces/adminEdit.interface'
 
 export const getAllAdmins = async () => {
     try {
@@ -9,6 +10,22 @@ export const getAllAdmins = async () => {
     } catch (error) {
         console.error('getAllAdmins service error', error)
         throw error
+    }
+}
+
+export const editAdminService = async (id: string, data: IAdminEdit) => {
+    try {
+        if (data === null) throw new Error('Theres no data to edit')
+        if (id === null) throw new Error('Theres no admin id')
+        const { username, email } = data
+        const editedAdmin = await Admin.findOneAndUpdate(
+            { _id: id },
+            { username, email }
+        )
+        return editedAdmin
+    } catch (error) {
+        console.error('editAdmin service error', error)
+        throw new Error('editAdmin service error')
     }
 }
 
@@ -34,5 +51,28 @@ export const loginAdmin = async (data: IToken) => {
     } catch (error) {
         console.error('loginAdmin service error', error)
         throw error
+    }
+}
+
+export const validateUserService = async (
+    authorization: string | undefined
+) => {
+    try {
+        if (authorization === undefined)
+            throw new Error('validateUser admin service error')
+        validateToken(authorization)
+
+        const tokenData = getTokenData(authorization).email
+
+        const admin = await Admin.findOne({ email: tokenData })
+
+        if (admin == null) {
+            throw new Error('Admin not found')
+        }
+
+        return admin
+    } catch (error) {
+        console.error('validateUser admin service error', error)
+        throw Error('validateUser admin service error')
     }
 }

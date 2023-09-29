@@ -3,8 +3,23 @@ import {
     getAllAdmins,
     loginAdmin,
     signupAdmin,
+    validateUserService,
+    editAdminService,
 } from '../services/admin.services'
 import { Admin } from '../models'
+
+export const secret = async (req: Request, res: Response) => {
+    try {
+        const admin = await validateUserService(req.headers.authorization)
+
+        res.status(200).send({
+            user: admin,
+        })
+    } catch (error) {
+        console.error('Error in admin secret', error)
+        res.status(500).send('admin secret controller error')
+    }
+}
 
 export const get_all_admins = async (_req: Request, res: Response) => {
     try {
@@ -16,6 +31,14 @@ export const get_all_admins = async (_req: Request, res: Response) => {
     }
 }
 
+export const editAdmin = async (req: Request, res: Response) => {
+    try {
+        const editedAdmin = await editAdminService(req.params.id, req.body.data)
+        res.status(200).send(editedAdmin)
+    } catch (error) {
+        console.error('Error editing admin: ', error)
+    }
+}
 export const signup_admin = async (req: Request, res: Response) => {
     try {
         const newAdmin = await signupAdmin(req.body)
