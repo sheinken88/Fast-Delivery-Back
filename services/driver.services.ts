@@ -1,5 +1,5 @@
 import { generateToken } from '../config/token'
-import type IToken from '../interfaces/token'
+import type { IToken } from '../interfaces/token'
 import { Driver } from '../models'
 
 export const getAllDrivers = async () => {

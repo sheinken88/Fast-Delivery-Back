@@ -6,7 +6,7 @@ import {
     updateDriverProfile,
 } from '../services/driver.services'
 import { Driver } from '../models'
-import type IToken from '../interfaces/token'
+import type { IToken } from '../interfaces/token'
 import { getTokenData, validateToken } from '../config/token'
 
 export const get_all_drivers = async (_req: Request, res: Response) => {

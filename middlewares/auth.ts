@@ -5,15 +5,31 @@ export function validateUser(req: Request, res: Response, next: NextFunction) {
     const authorization: string | undefined = req.headers.authorization
 
     if (authorization === undefined) {
+        res.status(401).json({ error: 'there is no logged driver' })
+        return
+    }
+
+    const driver = validateToken(authorization)
+
+    if (typeof driver === 'string') {
         res.status(401).json({ error: 'Access denied' })
         return
     }
 
-    const { user }: { user: string | null } = validateToken(authorization) as {
-        user: string | null
+    next()
+}
+
+export function validateAdmin(req: Request, res: Response, next: NextFunction) {
+    const authorization: string | undefined = req.headers.authorization
+
+    if (authorization === undefined) {
+        res.status(401).json({ error: 'there is no logged admin' })
+        return
     }
 
-    if (user === null) {
+    const token = validateToken(authorization)
+
+    if (typeof token === 'string' || token.payload.is_admin === false) {
         res.status(401).json({ error: 'Access denied' })
         return
     }
