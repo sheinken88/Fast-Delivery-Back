@@ -1,7 +1,7 @@
 import jwt, { type Secret } from 'jsonwebtoken'
 import dotenv from 'dotenv'
-import type IToken from '../../interfaces/token'
-import type IPayload from 'interfaces/payload.interface'
+import type { IToken } from '../../interfaces/token'
+import type IPayload from '../../interfaces/payload.interface'
 
 dotenv.config()
 

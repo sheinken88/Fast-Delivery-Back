@@ -75,7 +75,7 @@ export const createOrder = async (
             if (foundPackage != null) {
                 packages.push(foundPackage)
             } else {
-                console.log(`Package with ID ${p} not found.`)
+                console.error(`Package with ID ${p} not found.`)
             }
         }
 
@@ -142,7 +142,7 @@ export const cancelOrder = async (id: string) => {
             if (foundPackage !== null) {
                 packages.push(foundPackage)
             } else {
-                console.log(`Package with ID ${JSON.stringify(p)} not found.`)
+                console.error(`Package with ID ${JSON.stringify(p)} not found.`)
             }
         }
 

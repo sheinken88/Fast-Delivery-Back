@@ -54,18 +54,18 @@ export const login_admin = async (req: Request, res: Response) => {
         const { email, password } = req.body
 
         const admin = await Admin.findOne({ email })
-        if (admin == null) throw new Error('Admin not found')
+        if (admin === null) throw new Error('Admin not found')
 
         const isValid = await admin.validatePassword(password)
         if (!isValid) throw new Error('Incorrect data')
 
-        const { username, id } = admin
-        const token = await loginAdmin({ username, email })
+        const { username, is_admin } = admin
+        const token = await loginAdmin({ username, email, is_admin })
 
         res.status(200).json({
             message: 'Admin logged correctly',
             token,
-            user: { id, email, username },
+            user: { email, username },
         })
     } catch (error) {
         console.error('Error logging admin', error)

@@ -3,10 +3,15 @@ import type IAdmin from '../interfaces/admin.interface'
 import bcrypt from 'bcrypt'
 
 const adminSchema: Schema = new Schema({
+    is_admin: { type: Boolean, default: true },
     username: { type: String, required: true, unique: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    profile_pic: { type: String, default: '' },
+    profile_pic: {
+        type: String,
+        default:
+            'https://res.cloudinary.com/db3pcwsrm/image/upload/v1696036778/fast-delivery/assets/generic_profile_pic.png',
+    },
     salt: String,
 })
 

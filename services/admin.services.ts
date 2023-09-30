@@ -1,7 +1,7 @@
 import { Admin } from '../models'
 import { generateToken, getTokenData, validateToken } from '../config/token'
-import type IToken from '../interfaces/token'
-import type IAdminEdit from 'interfaces/adminEdit.interface'
+import type { ITokenAdmin } from '../interfaces/token'
+import type IAdminEdit from '../interfaces/adminEdit.interface'
 
 export const getAllAdmins = async () => {
     try {
@@ -44,7 +44,7 @@ export const signupAdmin = async (data: object) => {
     }
 }
 
-export const loginAdmin = async (data: IToken) => {
+export const loginAdmin = async (data: ITokenAdmin) => {
     try {
         const token = generateToken(data)
         return token
@@ -66,11 +66,11 @@ export const validateUserService = async (
 
         const admin = await Admin.findOne({ email: tokenData })
 
-        if (admin == null) {
+        if (admin === null) {
             throw new Error('Admin not found')
         }
-
-        return admin
+        const { email, username } = admin
+        return { email, username }
     } catch (error) {
         console.error('validateUser admin service error', error)
         throw Error('validateUser admin service error')
