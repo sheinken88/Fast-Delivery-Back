@@ -9,11 +9,9 @@ export function validateUser(req: Request, res: Response, next: NextFunction) {
         return
     }
 
-    const { user }: { user: string | null } = validateToken(authorization) as {
-        user: string | null
-    }
+    const driver = validateToken(authorization)
 
-    if (user === null) {
+    if (typeof driver === 'string') {
         res.status(401).json({ error: 'Access denied' })
         return
     }
