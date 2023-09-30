@@ -69,8 +69,8 @@ export const validateUserService = async (
         if (admin === null) {
             throw new Error('Admin not found')
         }
-        const { email, username } = admin
-        return { email, username }
+        const { email, username, profile_pic } = admin
+        return { email, username, profile_pic }
     } catch (error) {
         console.error('validateUser admin service error', error)
         throw Error('validateUser admin service error')
