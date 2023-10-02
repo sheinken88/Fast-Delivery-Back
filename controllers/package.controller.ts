@@ -7,6 +7,7 @@ import {
     getPendingPackages,
     getDeliveredPackages,
     getPackageById,
+    getInProgressPackages,
 } from '../services/package.services'
 
 export const get_all_packages = async (_req: Request, res: Response) => {
@@ -49,9 +50,22 @@ export const get_delivered_packages = async (_req: Request, res: Response) => {
     }
 }
 
+export const get_in_progress_packages = async (
+    _req: Request,
+    res: Response
+) => {
+    try {
+        const packages = await getInProgressPackages()
+        res.status(200).send(packages)
+    } catch (error) {
+        console.error('Error fetching packages:', error)
+        res.sendStatus(500)
+    }
+}
+
 export const create_package = async (req: Request, res: Response) => {
     try {
-        const newPackage = await createPackage(req.body)
+        const newPackage = await createPackage(req.body.data)
         res.status(200).send(newPackage)
     } catch (error) {
         console.error('Error creating package:', error)
