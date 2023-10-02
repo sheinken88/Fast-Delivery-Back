@@ -44,6 +44,16 @@ export const getDeliveredPackages = async () => {
     }
 }
 
+export const getInProgressPackages = async () => {
+    try {
+        const packages = await Package.find({ status: 'in progress' })
+        return packages
+    } catch (error) {
+        console.error('getPendingPackages service error', error)
+        throw error
+    }
+}
+
 export const createPackage = async (data: object) => {
     try {
         const newPackage = new Package(data)
