@@ -65,7 +65,7 @@ export const createPackage = async (data: object) => {
     }
 }
 
-export const editPackage = async (
+export const editPackageStatus = async (
     newPackageData: object,
     packageId: object
 ) => {

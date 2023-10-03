@@ -2,7 +2,7 @@ import express from 'express'
 import {
     create_package,
     get_all_packages,
-    edit_package,
+    edit_package_status,
     delete_package,
     get_pending_packages,
     get_delivered_packages,
@@ -17,6 +17,6 @@ packageRouter.get('/delivered', validateAdmin, get_delivered_packages)
 packageRouter.get('/in-progress', validateAdmin, get_in_progress_packages)
 packageRouter.post('/', validateAdmin, create_package)
 packageRouter.delete('/delete/:id', validateAdmin, delete_package)
-packageRouter.put('/edit', validateAdmin, edit_package)
+packageRouter.put('/edit', validateUser, edit_package_status)
 
 export default packageRouter

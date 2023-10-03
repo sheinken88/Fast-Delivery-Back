@@ -29,7 +29,12 @@ export function validateAdmin(req: Request, res: Response, next: NextFunction) {
 
     const token = validateToken(authorization)
 
-    if (typeof token === 'string' || token.payload.is_admin === false) {
+    if (
+        typeof token === 'string' ||
+        token.payload === undefined ||
+        token.payload.is_admin === undefined ||
+        token.payload.is_admin !== true
+    ) {
         res.status(401).json({ error: 'Access denied' })
         return
     }

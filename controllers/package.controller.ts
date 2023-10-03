@@ -2,7 +2,7 @@ import { type Request, type Response } from 'express'
 import {
     createPackage,
     getAllPackages,
-    editPackage,
+    editPackageStatus,
     deletePackage,
     getPendingPackages,
     getDeliveredPackages,
@@ -65,7 +65,7 @@ export const get_in_progress_packages = async (
 
 export const create_package = async (req: Request, res: Response) => {
     try {
-        const newPackage = await createPackage(req.body.data)
+        const newPackage = await createPackage(req.body)
         res.status(200).send(newPackage)
     } catch (error) {
         console.error('Error creating package:', error)
@@ -73,9 +73,9 @@ export const create_package = async (req: Request, res: Response) => {
     }
 }
 
-export const edit_package = async (req: Request, res: Response) => {
+export const edit_package_status = async (req: Request, res: Response) => {
     try {
-        const result = await editPackage(req.body.data, req.body._id)
+        const result = await editPackageStatus(req.body.data, req.body._id)
         if (result == null) throw new Error('Error editing package')
         res.status(200).send('edit done succesfully')
     } catch (error) {

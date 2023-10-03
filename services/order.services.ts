@@ -2,7 +2,7 @@ import { getTokenData } from '../config/token'
 import type IPackage from '../interfaces/package.interface'
 import { Driver, Package } from '../models'
 import { Order } from '../models/order'
-import { editPackage } from './package.services'
+import { editPackageStatus } from './package.services'
 
 export const getAllOrders = async () => {
     try {
@@ -56,6 +56,44 @@ export const getDriverCurrentDelivery = async (id: string) => {
     }
 }
 
+export const getPackagesInProgresFromOrder = async (driverId: string) => {
+    try {
+        const orders = await Order.find({ driver: driverId }).populate(
+            'packages'
+        )
+
+        const inProgresPackages = orders.flatMap((order) => {
+            return order.packages.filter(
+                (packageWith) => packageWith.status === 'in progress'
+            )
+        })
+
+        return inProgresPackages
+    } catch (error) {
+        console.error(error)
+        throw error
+    }
+}
+
+export const getPackagesDeliveredFromOrder = async (driverId: string) => {
+    try {
+        const orders = await Order.find({ driver: driverId }).populate(
+            'packages'
+        )
+
+        const deliveredPackages = orders.flatMap((order) => {
+            return order.packages.filter(
+                (packageWith) => packageWith.status === 'delivered'
+            )
+        })
+
+        return deliveredPackages
+    } catch (error) {
+        console.error(error)
+        throw error
+    }
+}
+
 export const createOrder = async (
     driverToken: string,
     idPackages: string[]
@@ -68,7 +106,7 @@ export const createOrder = async (
         for (const p of idPackages) {
             let foundPackage = await Package.findById(p)
             if (foundPackage !== null)
-                foundPackage = await editPackage(
+                foundPackage = await editPackageStatus(
                     { status: 'in progress' },
                     foundPackage._id
                 )
@@ -135,7 +173,7 @@ export const cancelOrder = async (id: string) => {
         for (const p of order.packages) {
             let foundPackage = await Package.findById(p)
             if (foundPackage !== null && foundPackage.status !== 'delivered')
-                foundPackage = await editPackage(
+                foundPackage = await editPackageStatus(
                     { status: 'pending' },
                     foundPackage._id
                 )
