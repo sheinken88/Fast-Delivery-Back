@@ -17,10 +17,11 @@ export const editAdminService = async (id: string, data: IAdminEdit) => {
     try {
         if (data === null) throw new Error('Theres no data to edit')
         if (id === null) throw new Error('Theres no admin id')
-        const { username, email } = data
+        const { username, email, profile_pic } = data
         const editedAdmin = await Admin.findOneAndUpdate(
             { _id: id },
-            { username, email }
+            { username, email, profile_pic },
+            { new: true }
         )
         return editedAdmin
     } catch (error) {

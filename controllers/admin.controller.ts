@@ -34,6 +34,7 @@ export const get_all_admins = async (_req: Request, res: Response) => {
 export const editAdmin = async (req: Request, res: Response) => {
     try {
         const editedAdmin = await editAdminService(req.params.id, req.body.data)
+        console.log('editedAdmin', editedAdmin)
         res.status(200).send(editedAdmin)
     } catch (error) {
         console.error('Error editing admin: ', error)
