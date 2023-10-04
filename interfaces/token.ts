@@ -7,4 +7,5 @@ export interface ITokenAdmin {
     is_admin: boolean
     username: string
     email: string
+    profile_pic: string
 }
