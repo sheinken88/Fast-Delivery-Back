@@ -60,13 +60,18 @@ export const login_admin = async (req: Request, res: Response) => {
         const isValid = await admin.validatePassword(password)
         if (!isValid) throw new Error('Incorrect data')
 
-        const { username, is_admin } = admin
-        const token = await loginAdmin({ username, email, is_admin })
+        const { username, is_admin, profile_pic } = admin
+        const token = await loginAdmin({
+            username,
+            email,
+            is_admin,
+            profile_pic,
+        })
 
         res.status(200).json({
             message: 'Admin logged correctly',
             token,
-            user: { email, username },
+            user: { email, username, profile_pic },
         })
     } catch (error) {
         console.error('Error logging admin', error)
