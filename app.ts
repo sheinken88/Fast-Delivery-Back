@@ -13,7 +13,12 @@ app.use(express.json())
 app.use(cookieParser())
 app.use(
     cors({
-        origin: ['http://54.159.77.78', 'http://localhost:3000'],
+        origin: [
+            'http://54.159.77.78',
+            'http://localhost:3000',
+            'http://44.204.221.70:3000',
+            'http://44.204.221.70:3001',
+        ],
         credentials: true,
     })
 )
