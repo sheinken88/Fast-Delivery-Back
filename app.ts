@@ -18,6 +18,7 @@ app.use(
             'http://localhost:3000',
             'http://44.204.221.70:3000',
             'http://44.204.221.70:3001',
+            'https://fast-delivery-front-one.vercel.app/',
         ],
         credentials: true,
     })
