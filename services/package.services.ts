@@ -87,8 +87,15 @@ export const editPackageStatus = async (
 
 export const deletePackage = async (id: string) => {
     try {
-        const result = await Package.deleteOne({ _id: id })
-        return result.deletedCount !== 0
+        const foundPackage = await Package.findOne({ _id: id })
+        if (foundPackage != null && foundPackage.status === 'pending') {
+            const result = await Package.deleteOne({ _id: id })
+            return result.deletedCount !== 0
+        } else {
+            throw new Error(
+                'Paquete no encontrado o no está en estado pendiente.'
+            )
+        }
     } catch (error) {
         console.error('editPackage service error', error)
         throw error
