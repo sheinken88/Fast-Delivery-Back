@@ -88,7 +88,7 @@ export const editPackageStatus = async (
 export const deletePackage = async (id: string) => {
     try {
         const foundPackage = await Package.findOne({ _id: id })
-        if (foundPackage != null && foundPackage.status === 'pending') {
+        if (foundPackage !== null && foundPackage.status === 'pending') {
             const result = await Package.deleteOne({ _id: id })
             return result.deletedCount !== 0
         } else {
