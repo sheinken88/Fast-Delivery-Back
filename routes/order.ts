@@ -10,6 +10,7 @@ import {
     add_packages_to_delivery,
     get_driver_in_progress_packages,
     get_driver_delivered_packages,
+    get_completed_day,
 } from '../controllers/order.controller'
 import { validateUser } from '../middlewares/auth'
 const orderRouter = express.Router()
@@ -24,6 +25,7 @@ orderRouter.get(
     validateUser,
     get_driver_in_progress_packages
 )
+orderRouter.get('/completed/:id', validateUser, get_completed_day)
 orderRouter.post('/', validateUser, create_order)
 orderRouter.put('/add-packages/:id', validateUser, add_packages_to_delivery)
 orderRouter.put('/complete/:id', validateUser, complete_order)

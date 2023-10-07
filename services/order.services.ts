@@ -1,3 +1,4 @@
+import type IOrder from 'interfaces/order.interface'
 import { getTokenData } from '../config/token'
 import type IPackage from '../interfaces/package.interface'
 import { Driver, Package } from '../models'
@@ -34,6 +35,54 @@ export const getOrdersByDriver = async (driverId: string) => {
             'packages'
         )
         return orders
+    } catch (error) {
+        console.error(error)
+        throw error
+    }
+}
+
+export const getOrdersByDriverAndDate = async (
+    driverId: string,
+    date: Date
+) => {
+    try {
+        const startOfDay = new Date(date)
+        startOfDay.setHours(0, 0, 0, 0)
+
+        const endOfDay = new Date(date)
+        endOfDay.setHours(23, 59, 59, 999)
+
+        const orders = await Order.find({
+            driver: driverId,
+            date: {
+                $gte: startOfDay,
+                $lte: endOfDay,
+            },
+        }).populate('packages')
+        return orders
+    } catch (error) {
+        console.error(error)
+        throw error
+    }
+}
+
+export const hasDeliveredTenPackagesToday = async (orders: IOrder[]) => {
+    try {
+        const count = orders.reduce((total, order) => {
+            return (
+                total +
+                order.packages.reduce((packageCount, packageStatus) => {
+                    return (
+                        packageCount +
+                        (packageStatus.status === 'pending' ||
+                        packageStatus.status === 'delivered'
+                            ? 1
+                            : 0)
+                    )
+                }, 0)
+            )
+        }, 0)
+        return count
     } catch (error) {
         console.error(error)
         throw error
