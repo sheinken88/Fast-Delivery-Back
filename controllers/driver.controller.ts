@@ -4,6 +4,7 @@ import {
     getAllDrivers,
     loginDriver,
     updateDriverProfile,
+    getActiveDrivers,
 } from '../services/driver.services'
 import { Driver } from '../models'
 import type { IToken } from '../interfaces/token'
@@ -15,6 +16,16 @@ export const get_all_drivers = async (_req: Request, res: Response) => {
         res.status(200).send(drivers)
     } catch (error) {
         console.error('Error fetching drivers:', error)
+        res.sendStatus(500)
+    }
+}
+
+export const get_active_drivers = async (_req: Request, res: Response) => {
+    try {
+        const drivers = await getActiveDrivers()
+        res.status(200).send(drivers)
+    } catch (error) {
+        console.error('Error fetching active drivers:', error)
         res.sendStatus(500)
     }
 }
