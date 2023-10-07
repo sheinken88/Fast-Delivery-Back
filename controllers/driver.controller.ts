@@ -46,26 +46,40 @@ export const login_driver = async (req: Request, res: Response) => {
 
         const driver = await Driver.findOne({ email })
 
-        if (driver == null) throw new Error('Driver not found')
+        if (driver === null) throw new Error('Driver not found')
 
         const isValid = await driver.validatePassword(password)
         if (!isValid) throw new Error('Incorrect password')
 
         const { _id, username, profile_pic, phone_number, status } = driver
-        const data: IToken = { username, email }
-        const token = await loginDriver(data)
 
-        res.status(200).json({
-            token,
-            user: {
-                _id,
-                username,
-                email,
-                profile_pic,
-                phone_number,
-                status,
-            },
-        })
+        if (status) {
+            const data: IToken = { username, email }
+            const token = await loginDriver(data)
+
+            res.status(200).json({
+                token,
+                user: {
+                    _id,
+                    username,
+                    email,
+                    profile_pic,
+                    phone_number,
+                    status,
+                },
+            })
+        } else {
+            res.status(200).json({
+                user: {
+                    _id,
+                    username,
+                    email,
+                    profile_pic,
+                    phone_number,
+                    status,
+                },
+            })
+        }
     } catch (error: unknown) {
         if (error instanceof Error) {
             console.error('Error logging driver', error)
