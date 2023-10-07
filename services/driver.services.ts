@@ -12,6 +12,16 @@ export const getAllDrivers = async () => {
     }
 }
 
+export const getActiveDrivers = async () => {
+    try {
+        const drivers = await Driver.find({ status: true })
+        return drivers
+    } catch (error) {
+        console.error('getActiveDrivers service error', error)
+        throw error
+    }
+}
+
 export const signupDriver = async (data: object) => {
     try {
         const newDriver = new Driver(data)
