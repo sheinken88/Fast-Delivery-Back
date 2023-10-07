@@ -10,6 +10,8 @@ import {
     addPackagesToOrder,
     getPackagesInProgresFromOrder,
     getPackagesDeliveredFromOrder,
+    getOrdersByDriverAndDate,
+    hasDeliveredTenPackagesToday,
 } from '../services/order.services'
 
 export const get_all_orders = async (_req: Request, res: Response) => {
@@ -82,6 +84,23 @@ export const get_driver_in_progress_packages = async (
         res.status(200).send(currentDelivery)
     } catch (error) {
         console.error('Get driver in progress packages controller error')
+    }
+}
+
+export const get_completed_day = async (req: Request, res: Response) => {
+    try {
+        const id = req.params.id
+        const today = new Date()
+        const orders = await getOrdersByDriverAndDate(id, today)
+
+        const count = await hasDeliveredTenPackagesToday(orders)
+
+        res.status(200).json({
+            count,
+        })
+    } catch (error) {
+        console.error('Get completed day controller error', error)
+        res.status(500).send('Get completed day controller error')
     }
 }
 
