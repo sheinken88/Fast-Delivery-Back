@@ -7,6 +7,7 @@ import {
     get_pending_packages,
     get_delivered_packages,
     get_in_progress_packages,
+    edit_package,
 } from '../controllers/package.controller'
 import { validateUser, validateAdmin } from '../middlewares/auth'
 const packageRouter = express.Router()
@@ -18,5 +19,6 @@ packageRouter.get('/in-progress', validateAdmin, get_in_progress_packages)
 packageRouter.post('/', validateAdmin, create_package)
 packageRouter.delete('/delete/:id', validateAdmin, delete_package)
 packageRouter.put('/edit', validateUser, edit_package_status)
+packageRouter.put('/edit/:id', validateAdmin, edit_package)
 
 export default packageRouter
