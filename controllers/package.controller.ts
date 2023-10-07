@@ -8,6 +8,7 @@ import {
     getDeliveredPackages,
     getPackageById,
     getInProgressPackages,
+    editPackage,
 } from '../services/package.services'
 
 export const get_all_packages = async (_req: Request, res: Response) => {
@@ -76,8 +77,23 @@ export const create_package = async (req: Request, res: Response) => {
 export const edit_package_status = async (req: Request, res: Response) => {
     try {
         const result = await editPackageStatus(req.body.data, req.body._id)
-        if (result == null) throw new Error('Error editing package')
+        if (result === null) throw new Error('Error editing package')
         res.status(200).send('edit done succesfully')
+    } catch (error) {
+        console.error('Error editing package:', error)
+        res.sendStatus(500)
+    }
+}
+
+export const edit_package = async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params
+
+        const result = await editPackage(id, req.body)
+
+        if (result === null) throw new Error('Error editing package')
+
+        res.status(200).send(result)
     } catch (error) {
         console.error('Error editing package:', error)
         res.sendStatus(500)

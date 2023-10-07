@@ -85,6 +85,26 @@ export const editPackageStatus = async (
     }
 }
 
+export const editPackage = async (
+    packageId: string,
+    newPackageData: object
+) => {
+    try {
+        const filter: FilterQuery<IPackage> = { _id: packageId }
+        const update: UpdateQuery<IPackage> = { $set: newPackageData }
+
+        const updatedPackage = await Package.findOneAndUpdate(filter, update, {
+            new: true,
+            runValidators: true,
+        })
+
+        return updatedPackage
+    } catch (error) {
+        console.error('Error en el servicio editPackage', error)
+        throw error
+    }
+}
+
 export const deletePackage = async (id: string) => {
     try {
         const foundPackage = await Package.findOne({ _id: id })
