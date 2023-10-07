@@ -17,6 +17,9 @@ const driverSchema: Schema = new Schema({
     password: { type: String, required: true },
     phone_number: { type: String, required: true, unique: true },
     status: { type: Boolean, default: true },
+    statements: [
+        { type: Schema.Types.ObjectId, ref: 'Statement', default: [] },
+    ],
     profile_pic: {
         type: String,
         default:

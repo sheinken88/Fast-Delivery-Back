@@ -10,4 +10,6 @@ const packageSchema: Schema = new Schema({
     quantity: { type: Number, required: true },
 })
 
-export const Package = mongoose.model<IPackage>('Package', packageSchema)
+const Package = mongoose.model<IPackage>('Package', packageSchema)
+
+export default Package
