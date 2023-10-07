@@ -159,7 +159,7 @@ export const createOrder = async (
                     { status: 'in progress' },
                     foundPackage._id
                 )
-            if (foundPackage != null) {
+            if (foundPackage !== null) {
                 packages.push(foundPackage)
             } else {
                 console.error(`Package with ID ${p} not found.`)

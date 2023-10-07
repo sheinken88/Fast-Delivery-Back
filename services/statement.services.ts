@@ -33,7 +33,7 @@ export const createStatement = async (
         const driverData = getTokenData(driverToken)
         const driver = await Driver.findOne({ email: driverData.email })
         const newStatement = await Statement.create(statement)
-        if (driver != null) {
+        if (driver !== null) {
             driver.statements = [...driver.statements, newStatement]
             await driver.save()
         }
