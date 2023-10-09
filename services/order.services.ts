@@ -74,8 +74,8 @@ export const hasDeliveredTenPackagesToday = async (orders: IOrder[]) => {
                 order.packages.reduce((packageCount, packageStatus) => {
                     return (
                         packageCount +
-                        (packageStatus.status === 'pending' ||
-                        packageStatus.status === 'delivered'
+                        (packageStatus.status !== 'pending' &&
+                        order.status !== 'cancelled'
                             ? 1
                             : 0)
                     )
@@ -133,7 +133,9 @@ export const getPackagesDeliveredFromOrder = async (driverId: string) => {
 
         const deliveredPackages = orders.flatMap((order) => {
             return order.packages.filter(
-                (packageWith) => packageWith.status === 'delivered'
+                (packageWith) =>
+                    packageWith.status === 'delivered' &&
+                    order.status !== 'cancelled'
             )
         })
 
@@ -256,7 +258,7 @@ export const cancelOrder = async (id: string) => {
                     { status: 'pending' },
                     foundPackage._id
                 )
-            if (foundPackage !== null) {
+            if (foundPackage !== null && foundPackage.status === 'delivered') {
                 packages.push(foundPackage)
             } else {
                 console.error(`Package with ID ${JSON.stringify(p)} not found.`)

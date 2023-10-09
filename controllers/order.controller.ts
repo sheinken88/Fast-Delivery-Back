@@ -67,6 +67,7 @@ export const get_driver_delivered_packages = async (
             req.params.id
         )
         if (currentDelivery === null) res.status(200).send({ packages: [] })
+
         res.status(200).send(currentDelivery)
     } catch (error) {
         console.error('Get drivers delivered packages controller error')
@@ -81,7 +82,6 @@ export const get_driver_delivered_packages_today = async (
         const currentDelivery = await getPackagesDeliveredFromOrderToday(
             req.params.id
         )
-        console.log(currentDelivery)
 
         if (currentDelivery === null) res.status(200).send({ packages: [] })
         res.status(200).send(currentDelivery)
