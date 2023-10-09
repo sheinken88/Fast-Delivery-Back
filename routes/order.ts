@@ -11,8 +11,9 @@ import {
     get_driver_in_progress_packages,
     get_driver_delivered_packages,
     get_completed_day,
+    get_driver_delivered_packages_today,
 } from '../controllers/order.controller'
-import { validateUser } from '../middlewares/auth'
+import { validateAdmin, validateUser } from '../middlewares/auth'
 const orderRouter = express.Router()
 
 orderRouter.get('/', validateUser, get_all_orders)
@@ -24,6 +25,11 @@ orderRouter.get(
     '/in-progress/:id',
     validateUser,
     get_driver_in_progress_packages
+)
+orderRouter.get(
+    '/delivered-today/:id',
+    validateAdmin,
+    get_driver_delivered_packages_today
 )
 orderRouter.get('/completed/:id', validateUser, get_completed_day)
 orderRouter.post('/', validateUser, create_order)

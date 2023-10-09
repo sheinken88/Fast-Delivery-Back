@@ -107,9 +107,10 @@ export const getDriverCurrentDelivery = async (id: string) => {
 
 export const getPackagesInProgresFromOrder = async (driverId: string) => {
     try {
-        const orders = await Order.find({ driver: driverId }).populate(
-            'packages'
-        )
+        const orders = await Order.find({
+            driver: driverId,
+            status: 'in progress',
+        }).populate('packages')
 
         const inProgresPackages = orders.flatMap((order) => {
             return order.packages.filter(
@@ -129,6 +130,34 @@ export const getPackagesDeliveredFromOrder = async (driverId: string) => {
         const orders = await Order.find({ driver: driverId }).populate(
             'packages'
         )
+
+        const deliveredPackages = orders.flatMap((order) => {
+            return order.packages.filter(
+                (packageWith) => packageWith.status === 'delivered'
+            )
+        })
+
+        return deliveredPackages
+    } catch (error) {
+        console.error(error)
+        throw error
+    }
+}
+
+export const getPackagesDeliveredFromOrderToday = async (driverId: string) => {
+    try {
+        const startOfDay = new Date()
+        startOfDay.setHours(0, 0, 0, 0)
+
+        const endOfDay = new Date()
+        endOfDay.setHours(23, 59, 59, 999)
+        const orders = await Order.find({
+            driver: driverId,
+            date: {
+                $gte: startOfDay,
+                $lte: endOfDay,
+            },
+        }).populate('packages')
 
         const deliveredPackages = orders.flatMap((order) => {
             return order.packages.filter(
