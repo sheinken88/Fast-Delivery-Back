@@ -32,13 +32,18 @@ export const createStatement = async (
     try {
         const driverData = getTokenData(driverToken)
         const driver = await Driver.findOne({ email: driverData.email })
-        const newStatement = await Statement.create(statement)
-        if (driver != null) {
-            driver.statements = [...driver.statements, newStatement]
-            await driver.save()
-        }
 
-        return newStatement
+        if (driver !== null) {
+            const newStatement = await Statement.create(statement)
+            driver.statements = [...driver.statements, newStatement]
+
+            await Driver.updateOne(
+                { email: driverData.email },
+                { $set: { statements: driver.statements } }
+            )
+            return newStatement
+        }
+        return statement
     } catch (error) {
         console.error('createStatement service error', error)
         throw new Error('createStatement service error')

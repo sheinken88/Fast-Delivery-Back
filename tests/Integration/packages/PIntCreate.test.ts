@@ -23,7 +23,7 @@ describe('Create Packages', () => {
 
         const foundPackage = await Package.findOne({ _id: createdPackage._id })
 
-        if (foundPackage != null) {
+        if (foundPackage !== null) {
             expect(createdPackage).toMatchObject(foundPackage.toObject())
         } else {
             fail('El paquete no se creo correctamente')

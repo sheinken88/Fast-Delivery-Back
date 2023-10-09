@@ -39,6 +39,7 @@ export const editAdmin = async (req: Request, res: Response) => {
         console.error('Error editing admin: ', error)
     }
 }
+
 export const signup_admin = async (req: Request, res: Response) => {
     try {
         const newAdmin = await signupAdmin(req.body)
