@@ -12,6 +12,7 @@ import {
     getPackagesDeliveredFromOrder,
     getOrdersByDriverAndDate,
     hasDeliveredTenPackagesToday,
+    getPackagesDeliveredFromOrderToday,
 } from '../services/order.services'
 
 export const get_all_orders = async (_req: Request, res: Response) => {
@@ -65,6 +66,23 @@ export const get_driver_delivered_packages = async (
         const currentDelivery = await getPackagesDeliveredFromOrder(
             req.params.id
         )
+        if (currentDelivery === null) res.status(200).send({ packages: [] })
+        res.status(200).send(currentDelivery)
+    } catch (error) {
+        console.error('Get drivers delivered packages controller error')
+    }
+}
+
+export const get_driver_delivered_packages_today = async (
+    req: Request,
+    res: Response
+) => {
+    try {
+        const currentDelivery = await getPackagesDeliveredFromOrderToday(
+            req.params.id
+        )
+        console.log(currentDelivery)
+
         if (currentDelivery === null) res.status(200).send({ packages: [] })
         res.status(200).send(currentDelivery)
     } catch (error) {
