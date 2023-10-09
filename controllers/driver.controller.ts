@@ -105,7 +105,7 @@ export const secret = async (req: Request, res: Response) => {
 
         const driver = await Driver.findOne({ email: tokenData })
 
-        if (driver == null) throw new Error('Driver not found')
+        if (driver === null) throw new Error('Driver not found')
 
         const { _id, username, profile_pic, phone_number, status, email } =
             driver

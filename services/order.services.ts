@@ -242,7 +242,7 @@ export const cancelOrder = async (id: string) => {
     try {
         const order = await Order.findOne({ _id: id })
 
-        if (order == null) {
+        if (order === null) {
             throw Error('No se encontró la orden con ese ID.')
         }
 
@@ -250,6 +250,7 @@ export const cancelOrder = async (id: string) => {
 
         for (const p of order.packages) {
             let foundPackage = await Package.findById(p)
+
             if (foundPackage !== null && foundPackage.status !== 'delivered')
                 foundPackage = await editPackageStatus(
                     { status: 'pending' },
